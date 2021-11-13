@@ -1,9 +1,9 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import Home from '../Home';
+import Network from './Network';
 
-test('renders test paragraph for homepage', () => {
-  render(<Home />);
+test('renders test paragraph for network view', () => {
+  render(<Network />);
   const element = screen.getByText(/network view/i);
   expect(element).toBeInTheDocument();
 });
