@@ -8,12 +8,12 @@ interface LinkItemProps {
   children: React.ReactNode;
 }
 
-export default function LinkItem({ children, to = "/" }: LinkItemProps) {
+export default function LinkItem({ children, to = '/' }: LinkItemProps) {
   return (
     <Link as={RouterLink} to={to}>
       <Button colorScheme="teal" size="md">
         {children}
       </Button>
     </Link>
-  )
+  );
 }

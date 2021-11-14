@@ -15,10 +15,10 @@ export default function App() {
     <ChakraProvider>
       <NavBar />
       <Routes>
-        <Route path="/" element={ <Home /> } />
-        <Route path="/network" element={ <Network/> } />
-        <Route path="/host" element={ <Host/> } />
-        <Route path="/block" element={ <Block/> } />
+        <Route path="/" element={<Home />} />
+        <Route path="/network" element={<Network />} />
+        <Route path="/host" element={<Host />} />
+        <Route path="/block" element={<Block />} />
       </Routes>
     </ChakraProvider>
   );

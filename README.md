@@ -4,6 +4,25 @@ Repository for the code for blockchain simulator capstone project.
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Setting Up Environment
+
+To set up your environment to begin contributing, go through the following steps:
+
+1) Install [nodejs](https://nodejs.org/en/).
+2) Run the following to install yarn.
+
+```
+npm install -g yarn
+```
+
+3) Run the following to install all packages needed for this project.
+
+```
+yarn install
+```
+
+4) Happy coding!
+
 ## Available Scripts
 
 In the project directory, you can run:
@@ -30,3 +49,11 @@ The build is minified and the filenames include the hashes.\
 Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+
+### `yarn format`
+
+Formats the project with prettier.
+
+### `yarn lint`
+
+Finds problems in the code automatically.
