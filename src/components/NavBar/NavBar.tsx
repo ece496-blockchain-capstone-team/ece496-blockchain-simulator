@@ -2,6 +2,8 @@ import React from 'react';
 
 import Logo from '../Logo';
 import NavLinks from './NavLinks';
+import GithubShortcut from './GithubShortcut';
+import ColorModeSwitcher from './ColorModeSwitcher';
 
 import { Flex, Box, Stack, Divider, Heading } from '@chakra-ui/react';
 
@@ -27,7 +29,16 @@ export default function NavBar() {
           <Logo w="100px" />
           <Heading> Blockchain Simulator </Heading>
         </Stack>
-        <NavLinks />
+        <Stack
+          spacing={2}
+          align="center"
+          justify="center"
+          direction="row"
+        >
+          <NavLinks />
+          <GithubShortcut />
+          <ColorModeSwitcher />
+        </Stack>
       </Flex>
       <Divider />
     </Box>
