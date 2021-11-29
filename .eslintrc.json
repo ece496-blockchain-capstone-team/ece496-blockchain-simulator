@@ -22,7 +22,7 @@
         "@typescript-eslint"
     ],
     "rules": {
-        "react/jsx-filename-extension": "off",
+        "react/jsx-filename-extension": ["warn", { "extensions": [ ".ts", ".tsx", ".js", ".jsx" ] }],
         "import/extensions": ["error", "never"],
         "no-restricted-exports": "off",
         "no-use-before-define": "off",
