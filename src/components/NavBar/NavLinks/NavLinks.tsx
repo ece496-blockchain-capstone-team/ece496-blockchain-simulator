@@ -1,8 +1,8 @@
 import React from 'react';
 
-import LinkItem from './LinkItem';
-
 import { Box, Stack } from '@chakra-ui/react';
+
+import LinkItem from './LinkItem';
 
 export default function NavLinks() {
   return (

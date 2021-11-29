@@ -1,11 +1,11 @@
 import React from 'react';
 
+import { Flex, Box, Stack, Divider, Heading } from '@chakra-ui/react';
+
 import Logo from '../Logo';
 import NavLinks from './NavLinks';
 import GithubShortcut from './GithubShortcut';
 import ColorModeSwitcher from './ColorModeSwitcher';
-
-import { Flex, Box, Stack, Divider, Heading } from '@chakra-ui/react';
 
 export default function NavBar() {
   return (
