@@ -2,6 +2,7 @@ import React from 'react';
 import ConnectionObj from './Connections';
 import HostRole from './HostType';
 import ChainObj from './Chain';
+import Actions from './actions';
 
 export default class Host {
     nodeId: number;
@@ -10,11 +11,13 @@ export default class Host {
     role: HostRole;
     locationIds: 0;
     connections: ConnectionObj[] = [];
+    connectedNodes: Host[] = [];
     lastValdationTime: 0;
     lastUpdatedTime: 0;
     lastActionTime: 0;
     validatorProbability: 0;
     chain: ChainObj;
+    actionQueue: Actions;
 
 
 
@@ -29,10 +32,21 @@ export default class Host {
             let tempConnections = new ConnectionObj(id, connectedNodes[i], 1);
             this.connections.push(tempConnections);
         }
+        this.actionQueue = new Actions();
     };
 
+    addConnectedNodes(node: Host){
+        this.connectedNodes.push(node);
+    }
+
+    takeAction(){
+        // let nextActoin = this.actionQueue.getNextAction; 
+        // if (nextActoin === 'brodcast'){
+        //     this.brodcastTransaction()
+        // }
+    }
+
     getId() {
-        console.log(this.nodeId);
         return this.nodeId;
     };
 
@@ -52,16 +66,29 @@ export default class Host {
         return tempNodes.join(', ');
     };
 
+    addBlock(){
+        console.log("adding block")
+        this.chain.addBlock();
+        // this.brodcastTransaction(this.chain);
+    }
+
     getChain(){
         return this.chain;
     };
 
-    updateChain(){
-
+    updateChain(vrsn: ChainObj){
+        if (this.chain.version > vrsn.version){
+            return true;
+        } 
+        this.chain.updateChain(vrsn);
+        this.brodcastTransaction(vrsn);
+        return true;
     };
 
-    brodcastTransaction(){
-
+    brodcastTransaction(vrsn: ChainObj){
+        for (let i = 0; i < this.connectedNodes.length; i++){
+            this.connectedNodes[i].updateChain(vrsn);
+        }
     };
 
     validateBlock(){
