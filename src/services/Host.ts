@@ -36,6 +36,22 @@ export default class Host {
         return this.nodeId;
     };
 
+    removeDup(element: any, index: any, array: any){
+            return (element !== this.nodeId);
+    };
+
+    getConnectedNodeIds(){
+        let tempNodes: number[] = [];
+        for (let i = 0; i < this.connections.length; i++){
+            for (let j = 0; j < this.connections[i].nodeIds.length; j++){
+                if (this.connections[i].nodeIds[j] !== this.nodeId){
+                    tempNodes.push(this.connections[i].nodeIds[j]);
+                }
+            }
+        }
+        return tempNodes.join(', ');
+    };
+
     getChain(){
         return this.chain;
     };

@@ -1,5 +1,10 @@
+
 export default class ChainObj {
-    version: 1;
+    version: number;
+
+    constructor(){
+        this.version = 1;
+    }
     
     getVersion(){
         return this.version;

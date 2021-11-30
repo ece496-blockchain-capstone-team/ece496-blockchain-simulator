@@ -1,4 +1,4 @@
-import { Box, Button, Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableCaption } from '@chakra-ui/react'
+import { Box, Stack, Button, Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableCaption } from '@chakra-ui/react'
 import React from 'react';
 import NetworkObj from '../../services/Network';
 
@@ -27,54 +27,57 @@ export default function Network() {
 
   return (
     <div className="NetworkView">
-      <Box bg='red' w='10%' p={4} color='white'> {network.getId()} </Box>
       <Table>
         <Thead>
           <Tr>
             <Th>Node Id</Th>
-            <Th>into</Th>
-            <Th isNumeric>multiply by</Th>
+            <Th>Blockchain Version</Th>
+            <Th>Connected Nodes</Th>
+            <Th>Actions</Th>
           </Tr>
         </Thead>
         <Tbody>
           <Tr>
             <Td>{network.getHosts()[0].getId()}</Td>
-            <Td>millimetres (mm)</Td>
-            <Td isNumeric>25.4</Td>
+            <Td>{network.getHosts()[0].getChain().getVersion()}</Td>
+            <Td>{network.getHosts()[0].getConnectedNodeIds()}</Td>
+            <Td><Button type="button" onClick={validatorselection}>Add Block</Button></Td>
           </Tr>
           <Tr>
             <Td>{network.getHosts()[1].getId()}</Td>
-            <Td>millimetres (mm)</Td>
-            <Td isNumeric>25.4</Td>
+            <Td>{network.getHosts()[1].getChain().getVersion()}</Td>
+            <Td>{network.getHosts()[1].getConnectedNodeIds()}</Td>
+            <Td><Button type="button" onClick={validatorselection}>Add Block</Button></Td>
           </Tr>
           <Tr>
             <Td>{network.getHosts()[2].getId()}</Td>
-            <Td>millimetres (mm)</Td>
-            <Td isNumeric>25.4</Td>
+            <Td>{network.getHosts()[2].getChain().getVersion()}</Td>
+            <Td>{network.getHosts()[2].getConnectedNodeIds()}</Td>
+            <Td><Button type="button" onClick={validatorselection}>Add Block</Button></Td>
           </Tr>
           <Tr>
             <Td>{network.getHosts()[3].getId()}</Td>
-            <Td>centimetres (cm)</Td>
-            <Td isNumeric>30.48</Td>
+            <Td>{network.getHosts()[3].getChain().getVersion()}</Td>
+            <Td>{network.getHosts()[3].getConnectedNodeIds()}</Td>
+            <Td><Button type="button" onClick={validatorselection}>Add Block</Button></Td>
           </Tr>
           <Tr>
             <Td>{network.getHosts()[4].getId()}</Td>
-            <Td>metres (m)</Td>
-            <Td isNumeric>0.91444</Td>
+            <Td>{network.getHosts()[4].getChain().getVersion()}</Td>
+            <Td>{network.getHosts()[4].getConnectedNodeIds()}</Td>
+            <Td><Button type="button" onClick={validatorselection}>Add Block</Button></Td>
           </Tr>
         </Tbody>
 
       </Table>
-      <span>
+      <Stack spacing={4} align="center" justify="center" direction="row">
         <Button type="button" onClick={clickHandler}>
           Hosts
         </Button>
-      </span>
-      <span>
         <Button type="button" onClick={validatorselection}>
           Select Validator
         </Button>
-      </span>
+      </Stack>
     </div>
   );
 }
