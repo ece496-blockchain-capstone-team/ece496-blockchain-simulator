@@ -21,5 +21,27 @@
         "@typescript-eslint"
     ],
     "rules": {
+        "react/jsx-filename-extension": ["warn", { "extensions": [ ".ts", ".tsx", ".js", ".jsx" ] }],
+        "import/extensions": ["error", "never"],
+        "no-restricted-exports": "off",
+        "no-use-before-define": "off",
+        "@typescript-eslint/no-use-before-define": "error",
+        "react/function-component-definition": [
+            "warn", 
+            { 
+                "namedComponents": "function-declaration",
+                "unnamedComponents": "arrow-function"
+            }
+        ],
+        "react/require-default-props": "off",
+        "react/jsx-props-no-spreading": "off",
+        "react/destructuring-assignment": "off",
+        "import/no-unresolved": "off",
+        "prefer-const": "off",
+        "no-unused-vars": "off",
+        "no-plusplus": "off",
+        "lines-between-class-members": "off",
+        "class-methods-use-this": "off",
+        "no-console": "off"
     }
 }

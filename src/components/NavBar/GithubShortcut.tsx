@@ -15,7 +15,7 @@ export default function GithubShortcut() {
       marginLeft="2"
       onClick={() => window.open(githubRepo)}
       icon={<GithubIcon />}
-      aria-label={`Go to Github Repository`}
+      aria-label="Go to Github Repository"
     />
   );
 }

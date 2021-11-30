@@ -1,8 +1,8 @@
 import React from 'react';
 
+import { Box, Image, BoxProps } from '@chakra-ui/react';
 import logo from './logo.png';
 import logoSquare from './logo square.png';
-import { Box, Image, BoxProps } from '@chakra-ui/react';
 
 interface LogoProps extends BoxProps {
   square?: boolean;
