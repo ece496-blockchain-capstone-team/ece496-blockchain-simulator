@@ -1,3 +1,1 @@
-export default class BlockObj {
-    
-}
+export default class BlockObj {}

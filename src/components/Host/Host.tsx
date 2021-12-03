@@ -1,8 +1,14 @@
 import React from 'react';
-import { Stack, List, ListItem, ListIcon, OrderedList, UnorderedList } from '@chakra-ui/react';
+import {
+  Stack,
+  List,
+  ListItem,
+  ListIcon,
+  OrderedList,
+  UnorderedList,
+} from '@chakra-ui/react';
 
 export default function Host() {
-  
   return (
     <div className="HostView">
       <p> Host Id: {} </p>
