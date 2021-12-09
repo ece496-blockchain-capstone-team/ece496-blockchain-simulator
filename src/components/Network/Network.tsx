@@ -32,7 +32,7 @@ export default function Network() {
   };
 
   const addBlock = (nodeNum: number) => {
-    network.nodeList[nodeNum].addBlock();
+    network.nodeList[nodeNum].addBlockAction(network.getCurrentTime() + 5);
   };
 
   // const forceUpdate = useForceUpdate();
@@ -40,6 +40,11 @@ export default function Network() {
   const validatorselection = () => {
     console.log('Validator selected:');
     console.log(network.chooseValidator());
+  };
+
+  const chainVersions = () => {
+    console.log('Validator selected:');
+    console.log(network.getHostAndChain());
   };
 
   // const getNodeData = (nodeNum: number) => {
@@ -57,7 +62,7 @@ export default function Network() {
         <Thead>
           <Tr>
             <Th>Node Id</Th>
-            <Th>Blockchain Version</Th>
+            {/* <Th>Blockchain Version</Th> */}
             <Th>Connected Nodes</Th>
             <Th>Actions</Th>
           </Tr>
@@ -65,7 +70,7 @@ export default function Network() {
         <Tbody>
           <Tr>
             <Td>{network.getHosts()[0].getId()}</Td>
-            <Td>{network.getHosts()[0].getChain().getVersion()}</Td>
+            {/* <Td>{network.getHosts()[0].getChain().getVersion()}</Td> */}
             <Td>{network.getHosts()[0].getConnectedNodeIds()}</Td>
             <Td>
               <Button type="button" onClick={() => addBlock(0)}>
@@ -75,7 +80,7 @@ export default function Network() {
           </Tr>
           <Tr>
             <Td>{network.getHosts()[1].getId()}</Td>
-            <Td>{network.getHosts()[1].getChain().getVersion()}</Td>
+            {/* <Td>{network.getHosts()[1].getChain().getVersion()}</Td> */}
             <Td>{network.getHosts()[1].getConnectedNodeIds()}</Td>
             <Td>
               <Button type="button" onClick={() => addBlock(1)}>
@@ -85,7 +90,7 @@ export default function Network() {
           </Tr>
           <Tr>
             <Td>{network.getHosts()[2].getId()}</Td>
-            <Td>{network.getHosts()[2].getChain().getVersion()}</Td>
+            {/* <Td>{network.getHosts()[2].getChain().getVersion()}</Td> */}
             <Td>{network.getHosts()[2].getConnectedNodeIds()}</Td>
             <Td>
               <Button type="button" onClick={() => addBlock(2)}>
@@ -95,7 +100,7 @@ export default function Network() {
           </Tr>
           <Tr>
             <Td>{network.getHosts()[3].getId()}</Td>
-            <Td>{network.getHosts()[3].getChain().getVersion()}</Td>
+            {/* <Td>{network.getHosts()[3].getChain().getVersion()}</Td> */}
             <Td>{network.getHosts()[3].getConnectedNodeIds()}</Td>
             <Td>
               <Button type="button" onClick={() => addBlock(3)}>
@@ -105,7 +110,7 @@ export default function Network() {
           </Tr>
           <Tr>
             <Td>{network.getHosts()[4].getId()}</Td>
-            <Td>{network.getHosts()[4].getChain().getVersion()}</Td>
+            {/* <Td>{network.getHosts()[4].getChain().getVersion()}</Td> */}
             <Td>{network.getHosts()[4].getConnectedNodeIds()}</Td>
             <Td>
               <Button type="button" onClick={() => addBlock(4)}>
@@ -125,9 +130,12 @@ export default function Network() {
         <Button type="button" onClick={clickHandler}>
           Hosts
         </Button>
-        <Button type="button" onClick={validatorselection}>
-          Select Validator
+        <Button type="button" onClick={chainVersions}>
+          Host Chain Versions
         </Button>
+        {/* <Button type="button" onClick={validatorselection}>
+          Host Chain Versions
+        </Button> */}
       </Stack>
     </div>
   );

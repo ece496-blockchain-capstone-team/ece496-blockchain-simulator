@@ -37,11 +37,20 @@ export default class Host {
     this.connectedNodes.push(node);
   }
 
-  takeAction() {
-    // let nextActoin = this.actionQueue.getNextAction;
-    // if (nextActoin === 'brodcast'){
-    //     this.brodcastTransaction()
-    // }
+  takeAction(time: number) {
+    let actions = this.actionQueue.getNextAction(time);
+    if (actions.length){
+      console.log(actions)
+      for (let i = 0; i < actions.length; i++){
+        if (actions[i][0] === 'add-block'){
+          this.addBlock(time)
+        }
+        else if (actions[i][0] === 'update-chain'){
+          this.updateChain(time, actions[i][1])
+        }
+      }
+      this.actionQueue.removeAction(time)
+    }
   }
 
   getId() {
@@ -64,28 +73,41 @@ export default class Host {
     return tempNodes.join(', ');
   }
 
-  addBlock() {
+  addBlockAction(time: number) {
+    let temp = [];
+    temp.push('add-block')
+    this.actionQueue.addAction(time, temp);
+  }
+
+  addBlock(time: number) {
     console.log('adding block');
     this.chain.addBlock();
-    // this.brodcastTransaction(this.chain);
+    this.brodcastTransaction(time, this.chain);
   }
 
   getChain() {
     return this.chain;
   }
 
-  updateChain(vrsn: ChainObj) {
-    if (this.chain.version > vrsn.version) {
+  updateChainAction(time: number, vrsn: ChainObj) {
+    let temp = [];
+    temp.push('update-chain')
+    temp.push(vrsn)
+    this.actionQueue.addAction(time, temp);
+  }
+
+  updateChain(time:number, vrsn: ChainObj) {
+    if (this.chain.version >= vrsn.version) {
       return true;
     }
     this.chain.updateChain(vrsn);
-    this.brodcastTransaction(vrsn);
+    this.brodcastTransaction(time, vrsn);
     return true;
   }
 
-  brodcastTransaction(vrsn: ChainObj) {
+  brodcastTransaction(time:number, vrsn: ChainObj) {
     for (let i = 0; i < this.connectedNodes.length; i++) {
-      this.connectedNodes[i].updateChain(vrsn);
+      this.connectedNodes[i].updateChainAction(time + 5, vrsn);
     }
   }
 

@@ -43,6 +43,7 @@
         "lines-between-class-members": "off",
         "class-methods-use-this": "off",
         "no-console": "off",
-        "react/no-unused-state": "off"
+        "react/no-unused-state": "off",
+        "prefer-template": "off"
     }
 }

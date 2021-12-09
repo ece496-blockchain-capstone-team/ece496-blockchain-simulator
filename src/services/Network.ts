@@ -6,9 +6,11 @@ export default class NetworkObj {
   networkId: 1;
   nodeList: Host[] = [];
   settings: any = {};
+  timeCounter: number = 0;
 
   constructor(numNodes: number) {
     this.networkId = 1;
+    this.timeCounter = 1;
     // for (let nodeid = 0; nodeid < numNodes; nodeid++){
     //     let hostRole = new HostRole("general");
     //     let tempHost = new Host(nodeid, hostRole, []);
@@ -21,7 +23,7 @@ export default class NetworkObj {
     let tempHost3 = new Host(2, hostRole, [1, 4, 0]);
     let tempHost4 = new Host(3, hostRole, [1, 4, 2]);
     let tempHost5 = new Host(4, hostRole, [2, 3]);
-    tempHost.addConnectedNodes(tempHost2);
+    tempHost.addConnectedNodes(tempHost3);
     tempHost.addConnectedNodes(tempHost5);
     this.nodeList.push(tempHost);
     tempHost2.addConnectedNodes(tempHost3);
@@ -48,14 +50,28 @@ export default class NetworkObj {
   }
 
   timeStep(steps: number) {
-    for (let i = 0; i < steps; i++) {
-      console.log('Time Step');
+    this.timeCounter += steps;
+    console.log(this.timeCounter)
+    for(let i = 0; i < this.nodeList.length; i++){
+      this.nodeList[i].takeAction(this.timeCounter);
     }
   }
 
   getId() {
     console.log(this.nodeList);
     return 1;
+  }
+
+  getHostAndChain() {
+    console.log(this.nodeList);
+    for (let i = 0; i < this.nodeList.length; i++){
+      console.log('Node ' + String(this.nodeList[i].nodeId) + ': ' + String(this.nodeList[i].chain.version))
+    }
+    return 1;
+  }
+
+  getCurrentTime() {
+    return this.timeCounter;
   }
 
   getHosts() {
