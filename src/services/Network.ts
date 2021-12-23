@@ -51,8 +51,8 @@ export default class NetworkObj {
 
   timeStep(steps: number) {
     this.timeCounter += steps;
-    console.log(this.timeCounter)
-    for(let i = 0; i < this.nodeList.length; i++){
+    console.log(this.timeCounter);
+    for (let i = 0; i < this.nodeList.length; i++) {
       this.nodeList[i].takeAction(this.timeCounter);
     }
   }
@@ -64,8 +64,13 @@ export default class NetworkObj {
 
   getHostAndChain() {
     console.log(this.nodeList);
-    for (let i = 0; i < this.nodeList.length; i++){
-      console.log('Node ' + String(this.nodeList[i].nodeId) + ': ' + String(this.nodeList[i].chain.version))
+    for (let i = 0; i < this.nodeList.length; i++) {
+      console.log(
+        'Node ' +
+          String(this.nodeList[i].nodeId) +
+          ': ' +
+          String(this.nodeList[i].chain.version)
+      );
     }
     return 1;
   }

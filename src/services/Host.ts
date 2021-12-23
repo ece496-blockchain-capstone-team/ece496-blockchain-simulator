@@ -39,17 +39,16 @@ export default class Host {
 
   takeAction(time: number) {
     let actions = this.actionQueue.getNextAction(time);
-    if (actions.length){
-      console.log(actions)
-      for (let i = 0; i < actions.length; i++){
-        if (actions[i][0] === 'add-block'){
-          this.addBlock(time)
-        }
-        else if (actions[i][0] === 'update-chain'){
-          this.updateChain(time, actions[i][1])
+    if (actions.length) {
+      console.log(actions);
+      for (let i = 0; i < actions.length; i++) {
+        if (actions[i][0] === 'add-block') {
+          this.addBlock(time);
+        } else if (actions[i][0] === 'update-chain') {
+          this.updateChain(time, actions[i][1]);
         }
       }
-      this.actionQueue.removeAction(time)
+      this.actionQueue.removeAction(time);
     }
   }
 
@@ -75,7 +74,7 @@ export default class Host {
 
   addBlockAction(time: number) {
     let temp = [];
-    temp.push('add-block')
+    temp.push('add-block');
     this.actionQueue.addAction(time, temp);
   }
 
@@ -91,12 +90,12 @@ export default class Host {
 
   updateChainAction(time: number, vrsn: ChainObj) {
     let temp = [];
-    temp.push('update-chain')
-    temp.push(vrsn)
+    temp.push('update-chain');
+    temp.push(vrsn);
     this.actionQueue.addAction(time, temp);
   }
 
-  updateChain(time:number, vrsn: ChainObj) {
+  updateChain(time: number, vrsn: ChainObj) {
     if (this.chain.version >= vrsn.version) {
       return true;
     }
@@ -105,7 +104,7 @@ export default class Host {
     return true;
   }
 
-  brodcastTransaction(time:number, vrsn: ChainObj) {
+  brodcastTransaction(time: number, vrsn: ChainObj) {
     for (let i = 0; i < this.connectedNodes.length; i++) {
       this.connectedNodes[i].updateChainAction(time + 5, vrsn);
     }
