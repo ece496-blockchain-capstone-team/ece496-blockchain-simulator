@@ -21,7 +21,12 @@ npm install -g yarn
 yarn install
 ```
 
-4) Happy coding!
+4) Run the following to set up pre-commit hooks for formatting and linting.
+```
+yarn prepare
+```
+
+5) Happy coding!
 
 ## Available Scripts
 
