@@ -2,31 +2,38 @@ import ChainObj from './Chain';
 import Actions from './actions';
 import BlockObj from './Block';
 
-export default class Host {
+export default class HostObj {
   nodeId: number;
   nodeName: string;
   userStake: number;
   locationId: number;
-  connectedNodes: Host[] = [];
+  connectedNodes: HostObj[] = [];
   lastLeaderTime: number = 0;
   lastActionTime: number = 0;
+  earnings: number = 0;
   chain: ChainObj;
   actions: Actions;
 
-  constructor(id: number, name: string, stake: number, connections: Host[]) {
+  constructor(id: number, name: string, stake: number, connections?: HostObj[]) {
     this.nodeId = id;
     this.nodeName = name;
     this.userStake = stake;
-    this.connectedNodes = connections;
+    if (connections) {
+      this.connectedNodes = connections;
+    }
     this.chain = new ChainObj();
     this.actions = new Actions();
   }
 
-  addConnectedNode(node: Host) {
-    this.connectedNodes.push(node);
+  addConnectedNodes(nodes: HostObj[]) {
+    for (let i = 0; i < nodes.length; i++) {
+      if (!this.connectedNodes.includes(nodes[i])) {
+        this.connectedNodes.push(nodes[i]);
+      }
+    }
   }
 
-  removeConnectedNode(node: Host) {
+  removeConnectedNode(node: HostObj) {
     const index = this.connectedNodes.indexOf(node);
     if (index > -1) {
       this.connectedNodes.splice(index, 1);
@@ -55,6 +62,10 @@ export default class Host {
   proposeBlock(time: number) {
     this.lastLeaderTime = time;
     return new BlockObj();
+  }
+
+  addEarnings(amount: number) {
+    this.earnings += amount;
   }
 
   getAction(time: number) {
@@ -87,5 +98,9 @@ export default class Host {
 
   getLastActionTime() {
     return this.lastActionTime;
+  }
+
+  getEarnings() {
+    return this.earnings;
   }
 }
