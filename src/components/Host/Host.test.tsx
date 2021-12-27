@@ -5,7 +5,7 @@ import HostObj from '../../services/Host';
 
 let hosts: HostObj[] = [];
 for (let i = 0; i < 1000; i++) {
-  hosts.push(new HostObj(i, 'test' + i, 1));
+  hosts.push(new HostObj(i, 'test' + i, 1, 'general', 1));
 }
 
 test('renders test paragraph for host view', () => {
