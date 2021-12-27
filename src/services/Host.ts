@@ -124,7 +124,7 @@ export default class HostObj {
    * @param action A list of actions performed during this time
    */
   addAction(time: number, action: any[]) {
-    this.actions.addAction(time, action);
+    this.actions.addActions(time, action);
     this.lastActionTime = time;
   }
 
@@ -187,7 +187,7 @@ export default class HostObj {
    * @returns The list of actions performed at that time
    */
   getAction(time: number) {
-    return this.actions.getNextAction(time);
+    return this.actions.getActions(time);
   }
 
   /**

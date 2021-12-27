@@ -1,28 +1,43 @@
-import React from 'react';
-
+/**
+ * # Actions
+ * A log for the actions of a host
+ */
 export default class Actions {
+  /**
+   * A dictionary with a time value as the key and information about the actions as a value
+   */
   action: any = {};
 
-  addAction(time: number, action: any[]) {
+  /**
+   * Add a action to the log
+   * @param time The time value when the actions took place
+   * @param actions Information about the actions
+   */
+  addActions(time: number, actions: any[]) {
     if (time in this.action) {
-      console.log('Exist');
-      console.log(this.action);
-      this.action[time].push(action);
+      this.action[time] = this.action[time].concat(actions);
     } else {
-      console.log('Doesnt exist');
-      console.log(this.action);
       this.action[time] = [];
-      this.action[time].push(action);
+      this.action[time].push(actions);
     }
   }
 
-  removeAction(time: number) {
+  /**
+   * Delete all the actions at a particular time value
+   * @param time The time value to delete
+   */
+  removeActions(time: number) {
     if (time in this.action) {
       delete this.action[time];
     }
   }
 
-  getNextAction(time: number) {
+  /**
+   * Get the list of actions at a particular time value
+   * @param time The time value to query
+   * @returns A list of information about the actions
+   */
+  getActions(time: number) {
     if (time in this.action) {
       return this.action[time];
     }
