@@ -115,6 +115,9 @@ dist
 # production
 /build
 
+# auto-generated documentation
+/docs
+
 # misc
 .DS_Store
 .env.local
