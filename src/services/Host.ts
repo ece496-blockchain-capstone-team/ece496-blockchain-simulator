@@ -91,7 +91,7 @@ export default class HostObj {
    * Connects one or more hosts to this host
    * @param nodes A list of **HostObj** to connect to this host
    */
-  addConnectedNodes(nodes: HostObj[]) {
+  addConnectedNodes(nodes: HostObj[]): void {
     for (let i = 0; i < nodes.length; i++) {
       if (!this.connectedNodes.includes(nodes[i])) {
         this.connectedNodes.push(nodes[i]);
@@ -104,7 +104,7 @@ export default class HostObj {
    * @param node A **HostObj** currently connected to this host
    * @returns Whether the disconnection was successful for this host
    */
-  private removeConnectedNode(node: HostObj) {
+  private removeConnectedNode(node: HostObj): boolean {
     const index = this.connectedNodes.indexOf(node);
     if (index > -1) {
       this.connectedNodes.splice(index, 1);
@@ -118,7 +118,7 @@ export default class HostObj {
    * @param node A **HostObj** currently connected to this host
    * @returns Whether the disconnection was successful
    */
-  disconnectFrom(node: HostObj) {
+  disconnectFrom(node: HostObj): boolean {
     if (this.removeConnectedNode(node) && node.removeConnectedNode(this)) {
       return true;
     }
@@ -129,7 +129,7 @@ export default class HostObj {
    * Changes the amount of stake that this host has deposited
    * @param stake The new deposit amount
    */
-  setStake(stake: number) {
+  setStake(stake: number): void {
     this.stake = stake;
   }
 
@@ -138,7 +138,7 @@ export default class HostObj {
    * @param time The time value of the action that was added
    * @param action A list of actions performed during this time
    */
-  addAction(time: number, action: any[]) {
+  addAction(time: number, action: any[]): void {
     this.actions.addActions(time, action);
     this.lastActionTime = time;
   }
@@ -149,7 +149,7 @@ export default class HostObj {
    * @param block The **BlockObj** for validation
    * @returns The decision of the host
    */
-  validateBlock(time: number, block: BlockObj) {
+  validateBlock(time: number, block: BlockObj): boolean {
     this.addAction(time, ['Validated a block']);
     return true;
   }
@@ -159,7 +159,7 @@ export default class HostObj {
    * @param time The time value when the block was added
    * @param block The **BlockObj** to be added
    */
-  addBlock(time: number, block: BlockObj) {
+  addBlock(time: number, block: BlockObj): void {
     this.addAction(time, ['Updated the blockchain']);
     this.chain.addBlock();
   }
@@ -169,7 +169,7 @@ export default class HostObj {
    * @param time The time value when the leader proposed a new block
    * @returns The proposed **BlockObj**, or null if the host is not a leader
    */
-  proposeBlock(time: number) {
+  proposeBlock(time: number): BlockObj | null {
     if (this.role.getRole() === 'leader') {
       this.lastLeaderTime = time;
       this.addAction(time, ['Proposed a new block']);
@@ -183,7 +183,7 @@ export default class HostObj {
    * @param time The time value when the host earned currency
    * @param amount The amount of currency the host gained
    */
-  addEarnings(time: number, amount: number) {
+  addEarnings(time: number, amount: number): void {
     this.addAction(time, ['Received ' + amount]);
     this.earnings += amount;
   }
@@ -192,7 +192,7 @@ export default class HostObj {
    * Change the role of the host
    * @param role A the host's new **HostRole**
    */
-  changeRole(role: string) {
+  changeRole(role: string): void {
     this.role = new HostRole(role);
   }
 
@@ -201,77 +201,77 @@ export default class HostObj {
    * @param time The time value to query
    * @returns The list of actions performed at that time
    */
-  getAction(time: number) {
+  getAction(time: number): any {
     return this.actions.getActions(time);
   }
 
   /**
    * @returns The unique ID number for the host
    */
-  getId() {
+  getId(): number {
     return this.nodeId;
   }
 
   /**
    * @returns The name of the host
    */
-  getName() {
+  getName(): string {
     return this.nodeName;
   }
 
   /**
    * @returns The ID of the geographical location that the host is in
    */
-  getLocationId() {
+  getLocationId(): number {
     return this.locationId;
   }
 
   /**
    * @returns The **HostRole** that this host is currently performing
    */
-  getRole() {
+  getRole(): HostRole {
     return this.role;
   }
 
   /**
    * @returns The amount of currency that was earned by this host
    */
-  getStake() {
+  getStake(): number {
     return this.stake;
   }
 
   /**
    * @returns A list of **HostObj** that are connected to this host
    */
-  getConnectedNodes() {
+  getConnectedNodes(): HostObj[] {
     return this.connectedNodes;
   }
 
   /**
    * @returns The copy of the blockchain held by the host
    */
-  getChain() {
+  getChain(): ChainObj {
     return this.chain;
   }
 
   /**
    * @returns The most recent time value when this node was the leader
    */
-  getLastLeaderTime() {
+  getLastLeaderTime(): number {
     return this.lastLeaderTime;
   }
 
   /**
    * @returns The most recent time value when this node performed an action
    */
-  getLastActionTime() {
+  getLastActionTime(): number {
     return this.lastActionTime;
   }
 
   /**
    * @returns The amount of currency this node has earned from being a leader
    */
-  getEarnings() {
+  getEarnings(): number {
     return this.earnings;
   }
 }

@@ -28,14 +28,14 @@ export default class HostRole {
   /**
    * @returns The name of the role
    */
-  getRole() {
+  getRole(): string {
     return this.role;
   }
 
   /**
    * @returns The list of all possible host roles
    */
-  getAllowedRoles() {
+  getAllowedRoles(): string[] {
     return this.allowedRoles;
   }
 }

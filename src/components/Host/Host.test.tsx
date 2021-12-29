@@ -31,9 +31,9 @@ test('hosts can connect to other hosts', () => {
 });
 
 test('hosts can disconnect from other hosts', () => {
-  let removed01 = hosts[0].disconnectFrom(hosts[1]);
+  let removed = hosts[0].disconnectFrom(hosts[1]);
 
-  expect(removed01).toBeTruthy();
+  expect(removed).toBeTruthy();
   expect(hosts[0].getConnectedNodes()[0].getId()).toBe(2);
   expect(hosts[0].getConnectedNodes().length).toBe(1);
   expect(hosts[1].getConnectedNodes()[0].getId()).toBe(3);
