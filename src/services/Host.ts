@@ -12,70 +12,74 @@ export default class HostObj {
   /**
    * The unique ID number for the host
    */
-  nodeId: number;
+  private nodeId: number;
   /**
    * A name for the host
    */
-  nodeName: string;
+  private nodeName: string;
   /**
    * The amount of currency that the host has deposited
    */
-  stake: number;
+  private stake: number;
   /**
    * The ID of the geographical location that the host is in
    */
-  locationId: number;
+  private locationId: number;
   /**
    * A list of **HostObj** that are connected to this host
    */
-  connectedNodes: HostObj[] = [];
+  private connectedNodes: HostObj[] = [];
   /**
    * The most recent time value when this node was the leader
    */
-  lastLeaderTime: number = 0;
+  private lastLeaderTime: number = 0;
   /**
    * The most recent time value when this node performed an action
    */
-  lastActionTime: number = 0;
+  private lastActionTime: number = 0;
   /**
    * The amount of currency that was earned by this host
    */
-  earnings: number = 0;
+  private earnings: number = 0;
   /**
    * The copy of the blockchain held by the host
    */
-  chain: ChainObj;
+  private chain: ChainObj;
   /**
    * A history of **Actions** performed by this host
    */
-  actions: Actions;
+  private actions: Actions;
   /**
    * The **HostRole** that this host is currently performing
    */
-  role: HostRole;
+  private role: HostRole;
 
   /**
    * Creates a new host object
    * @param id The unique ID number for the host
    * @param name A name for the host
    * @param location The ID of the geographical location that the host is in
-   * @param role The role that this host is currently performing
    * @param stake The amount of currency that the host has deposited
+   * @param role The role that this host is currently performing
    * @param connections A list of **HostObj** that are connected to this host
    */
   constructor(
     id: number,
     name: string,
     location: number,
-    role: string,
     stake: number,
+    role?: string,
     connections?: HostObj[]
   ) {
     this.nodeId = id;
     this.nodeName = name;
     this.stake = stake;
     this.locationId = location;
-    this.role = new HostRole(role);
+    if (role) {
+      this.role = new HostRole(role);
+    } else {
+      this.role = new HostRole('general');
+    }
     if (connections) {
       this.connectedNodes = connections;
     }
@@ -96,15 +100,26 @@ export default class HostObj {
   }
 
   /**
-   * Disconnects this host from one other host.
-   * This function needs to be called for both hosts involved.
+   * Helper function for removing a node from this host's list of connected nodes
    * @param node A **HostObj** currently connected to this host
    * @returns Whether the disconnection was successful for this host
    */
-  removeConnectedNode(node: HostObj) {
+  private removeConnectedNode(node: HostObj) {
     const index = this.connectedNodes.indexOf(node);
     if (index > -1) {
       this.connectedNodes.splice(index, 1);
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Disconnects this host from one other host, and disconnects that host form this host
+   * @param node A **HostObj** currently connected to this host
+   * @returns Whether the disconnection was successful
+   */
+  disconnectFrom(node: HostObj) {
+    if (this.removeConnectedNode(node) && node.removeConnectedNode(this)) {
       return true;
     }
     return false;
@@ -155,7 +170,7 @@ export default class HostObj {
    * @returns The proposed **BlockObj**, or null if the host is not a leader
    */
   proposeBlock(time: number) {
-    if (this.role.type === 'leader') {
+    if (this.role.getRole() === 'leader') {
       this.lastLeaderTime = time;
       this.addAction(time, ['Proposed a new block']);
       return new BlockObj();
@@ -202,6 +217,13 @@ export default class HostObj {
    */
   getName() {
     return this.nodeName;
+  }
+
+  /**
+   * @returns The ID of the geographical location that the host is in
+   */
+  getLocationId() {
+    return this.locationId;
   }
 
   /**

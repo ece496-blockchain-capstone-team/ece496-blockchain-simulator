@@ -4,8 +4,9 @@ import Host from './Host';
 import HostObj from '../../services/Host';
 
 let hosts: HostObj[] = [];
-for (let i = 0; i < 1000; i++) {
-  hosts.push(new HostObj(i, 'test' + i, 1, 'general', 1));
+const MIN_HOST_SUPPORT = 1000;
+for (let i = 0; i < MIN_HOST_SUPPORT; i++) {
+  hosts.push(new HostObj(i, 'test' + i, 1, 1, 'general'));
 }
 
 test('renders test paragraph for host view', () => {
@@ -30,11 +31,9 @@ test('hosts can connect to other hosts', () => {
 });
 
 test('hosts can disconnect from other hosts', () => {
-  let removed01 = hosts[0].removeConnectedNode(hosts[1]);
-  let removed10 = hosts[1].removeConnectedNode(hosts[0]);
+  let removed01 = hosts[0].disconnectFrom(hosts[1]);
 
   expect(removed01).toBeTruthy();
-  expect(removed10).toBeTruthy();
   expect(hosts[0].getConnectedNodes()[0].getId()).toBe(2);
   expect(hosts[0].getConnectedNodes().length).toBe(1);
   expect(hosts[1].getConnectedNodes()[0].getId()).toBe(3);

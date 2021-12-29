@@ -6,25 +6,36 @@ export default class HostRole {
   /**
    * The name of the role
    */
-  type: string;
+  private role: string;
 
   /**
-   * Make sure the role is one of the supported types
-   * @param objType The name of the role. It must be 'general', 'leader', or 'malicious'
+   * A list of all possible host roles
    */
-  constructor(objType: string) {
-    let allowedTypes = ['general', 'leader', 'malicious'];
-    if (allowedTypes.includes(objType)) {
-      this.type = objType;
+  private allowedRoles: string[] = ['general', 'leader', 'malicious'];
+
+  /**
+   * Make sure the role is one of the supported types. If not, it default to 'general'.
+   * @param role The name of the role. It must be 'general', 'leader', or 'malicious'
+   */
+  constructor(role: string) {
+    if (this.allowedRoles.includes(role)) {
+      this.role = role;
     } else {
-      this.type = 'general';
+      this.role = 'general';
     }
   }
 
   /**
    * @returns The name of the role
    */
-  getType() {
-    return this.type;
+  getRole() {
+    return this.role;
+  }
+
+  /**
+   * @returns The list of all possible host roles
+   */
+  getAllowedRoles() {
+    return this.allowedRoles;
   }
 }

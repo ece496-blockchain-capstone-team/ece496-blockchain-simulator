@@ -36,9 +36,9 @@ export default class NetworkObj {
     for (let i = 0; i < this.nodeList.length; i++) {
       console.log(
         'Node ' +
-          String(this.nodeList[i].nodeId) +
+          String(this.nodeList[i].getId()) +
           ': ' +
-          String(this.nodeList[i].chain.version)
+          String(this.nodeList[i].getChain().version)
       );
     }
     return 1;
