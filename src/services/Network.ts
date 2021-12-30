@@ -1,6 +1,5 @@
 import Host from './Host';
 import ConnectionObj from './Connections';
-import HostRole from './HostRole';
 
 export default class NetworkObj {
   networkId: 1;

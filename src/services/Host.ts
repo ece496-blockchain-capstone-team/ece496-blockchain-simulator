@@ -1,14 +1,19 @@
 import ChainObj from './Chain';
 import Actions from './Actions';
 import BlockObj from './Block';
-import HostRole from './HostRole';
+
+enum Role { // eslint-disable-line no-shadow
+  General = 'General',
+  Leader = 'Leader',
+  Malicious = 'Malicious',
+}
 
 /**
- * # HostObj
+ * # Host
  * <br/>
  * Contains information about a host and functions for changing or retrieving that information
  */
-export default class HostObj {
+export default class Host {
   /**
    * The unique ID number for the host
    */
@@ -26,9 +31,9 @@ export default class HostObj {
    */
   private locationId: number;
   /**
-   * A list of **HostObj** that are connected to this host
+   * A list of **Host** that are connected to this host
    */
-  private connectedNodes: HostObj[] = [];
+  private connectedNodes: Host[] = [];
   /**
    * The most recent time value when this node was the leader
    */
@@ -50,9 +55,14 @@ export default class HostObj {
    */
   private actions: Actions;
   /**
-   * The **HostRole** that this host is currently performing
+   * The **Role** that this host is currently performing
    */
-  private role: HostRole;
+  private role: Role;
+
+  /**
+   * An enum containing all possible roles for the host: General, Leader, Malicious
+   */
+  static Role = Role;
 
   /**
    * Creates a new host object
@@ -61,24 +71,24 @@ export default class HostObj {
    * @param location The ID of the geographical location that the host is in
    * @param stake The amount of currency that the host has deposited
    * @param role The role that this host is currently performing
-   * @param connections A list of **HostObj** that are connected to this host
+   * @param connections A list of **Host** that are connected to this host
    */
   constructor(
     id: number,
     name: string,
     location: number,
     stake: number,
-    role?: string,
-    connections?: HostObj[]
+    role?: Role,
+    connections?: Host[]
   ) {
     this.nodeId = id;
     this.nodeName = name;
     this.stake = stake;
     this.locationId = location;
     if (role) {
-      this.role = new HostRole(role);
+      this.role = role;
     } else {
-      this.role = new HostRole('general');
+      this.role = Role.General;
     }
     if (connections) {
       this.connectedNodes = connections;
@@ -89,9 +99,9 @@ export default class HostObj {
 
   /**
    * Connects one or more hosts to this host
-   * @param nodes A list of **HostObj** to connect to this host
+   * @param nodes A list of **Host** to connect to this host
    */
-  addConnectedNodes(nodes: HostObj[]): void {
+  addConnectedNodes(nodes: Host[]): void {
     for (let i = 0; i < nodes.length; i++) {
       if (!this.connectedNodes.includes(nodes[i])) {
         this.connectedNodes.push(nodes[i]);
@@ -101,10 +111,10 @@ export default class HostObj {
 
   /**
    * Helper function for removing a node from this host's list of connected nodes
-   * @param node A **HostObj** currently connected to this host
+   * @param node A **Host** currently connected to this host
    * @returns Whether the disconnection was successful for this host
    */
-  private removeConnectedNode(node: HostObj): boolean {
+  private removeConnectedNode(node: Host): boolean {
     const index = this.connectedNodes.indexOf(node);
     if (index > -1) {
       this.connectedNodes.splice(index, 1);
@@ -115,10 +125,10 @@ export default class HostObj {
 
   /**
    * Disconnects this host from one other host, and disconnects that host form this host
-   * @param node A **HostObj** currently connected to this host
+   * @param node A **Host** currently connected to this host
    * @returns Whether the disconnection was successful
    */
-  disconnectFrom(node: HostObj): boolean {
+  disconnectFrom(node: Host): boolean {
     if (this.removeConnectedNode(node) && node.removeConnectedNode(this)) {
       return true;
     }
@@ -170,7 +180,7 @@ export default class HostObj {
    * @returns The proposed **BlockObj**, or null if the host is not a leader
    */
   proposeBlock(time: number): BlockObj | null {
-    if (this.role.getRole() === 'leader') {
+    if (this.role === Role.Leader) {
       this.lastLeaderTime = time;
       this.addAction(time, ['Proposed a new block']);
       return new BlockObj();
@@ -190,10 +200,10 @@ export default class HostObj {
 
   /**
    * Change the role of the host
-   * @param role A the host's new **HostRole**
+   * @param role A the host's new **Role**
    */
-  changeRole(role: string): void {
-    this.role = new HostRole(role);
+  changeRole(role: Role): void {
+    this.role = role;
   }
 
   /**
@@ -227,9 +237,9 @@ export default class HostObj {
   }
 
   /**
-   * @returns The **HostRole** that this host is currently performing
+   * @returns The **Role** that this host is currently performing
    */
-  getRole(): HostRole {
+  getRole(): Role {
     return this.role;
   }
 
@@ -241,9 +251,9 @@ export default class HostObj {
   }
 
   /**
-   * @returns A list of **HostObj** that are connected to this host
+   * @returns A list of **Host** that are connected to this host
    */
-  getConnectedNodes(): HostObj[] {
+  getConnectedNodes(): Host[] {
     return this.connectedNodes;
   }
 

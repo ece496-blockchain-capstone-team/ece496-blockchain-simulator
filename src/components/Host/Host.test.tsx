@@ -1,16 +1,16 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import Host from './Host';
-import HostObj from '../../services/Host';
+import HostView from './Host';
+import Host from '../../services/Host';
 
-let hosts: HostObj[] = [];
+let hosts: Host[] = [];
 const MIN_HOST_SUPPORT = 1000;
 for (let i = 0; i < MIN_HOST_SUPPORT; i++) {
-  hosts.push(new HostObj(i, 'test' + i, 1, 1, 'general'));
+  hosts.push(new Host(i, 'test' + i, 1, 1, Host.Role.General));
 }
 
 test('renders test paragraph for host view', () => {
-  render(<Host />);
+  render(<HostView />);
   const element = screen.getByText(/host view/i);
   expect(element).toBeInTheDocument();
 });
