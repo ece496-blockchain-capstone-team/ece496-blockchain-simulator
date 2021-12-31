@@ -1,11 +1,17 @@
 import React from 'react';
-
-import { Grid, GridItem, Heading, Divider } from '@chakra-ui/react';
+import { Button, Grid } from '@chakra-ui/react';
 
 export default function Home() {
   return (
-    <Grid w="100%" p={4} gap={4}>
-      <Heading> Home </Heading>
-    </Grid>
+    <div className="HomePage">
+      <div className="options">
+        <Grid templateColumns="repeat(2, 2fr)" gap={6} width={500}>
+          <Button size="lg">Introduction</Button>
+          <Button size="lg">Simulation Settings</Button>
+          <Button size="lg">Create Network</Button>
+          <Button size="lg">Start Simulation</Button>
+        </Grid>
+      </div>
+    </div>
   );
 }

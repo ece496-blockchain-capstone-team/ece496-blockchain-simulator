@@ -4,6 +4,6 @@ import Home from '../Home';
 
 test('home is rendered', () => {
   render(<Home />);
-  const element = screen.getByText(/home/i);
+  const element = screen.getByText(/Simulation Settings/i);
   expect(element).toBeInTheDocument();
 });
