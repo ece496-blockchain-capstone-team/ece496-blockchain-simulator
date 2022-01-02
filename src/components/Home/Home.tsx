@@ -1,7 +1,10 @@
 import React from 'react';
 import { Button, Grid, Heading } from '@chakra-ui/react';
+import { useNavigate } from 'react-router-dom';
 
 export default function Home() {
+  let navigate = useNavigate();
+
   function toggleItemDisplay(itemName: string) {
     let options = document.getElementById('options');
     let item = document.getElementById(itemName);
@@ -18,15 +21,11 @@ export default function Home() {
           <Button size="lg" onClick={() => toggleItemDisplay('introduction')}>
             Introduction
           </Button>
-          <Button size="lg" onClick={() => toggleItemDisplay('network-settings')}>
-            Create Network
-          </Button>
-          <Button size="lg" onClick={() => toggleItemDisplay('settings')}>
+          <Button size="lg">Create Network</Button>
+          <Button size="lg" onClick={() => navigate('/simulation-settings')}>
             Simulation Settings
           </Button>
-          <Button size="lg" onClick={() => alert('Not implemented yet')}>
-            Start Simulation
-          </Button>
+          <Button size="lg">Start Simulation</Button>
         </Grid>
       </div>
       <div id="introduction" hidden>
@@ -35,20 +34,6 @@ export default function Home() {
         <br />
         <Button size="sm" onClick={() => toggleItemDisplay('introduction')}>
           Back
-        </Button>
-      </div>
-      <div id="network-settings" hidden>
-        <Heading size="lg">Create Network</Heading>
-        <br />
-        <Button size="sm" onClick={() => toggleItemDisplay('network-settings')}>
-          Save
-        </Button>
-      </div>
-      <div id="settings" hidden>
-        <Heading size="lg">Simulation Settings</Heading>
-        <br />
-        <Button size="sm" onClick={() => toggleItemDisplay('settings')}>
-          Save
         </Button>
       </div>
     </div>
