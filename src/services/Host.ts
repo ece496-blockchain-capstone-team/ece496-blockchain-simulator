@@ -171,19 +171,24 @@ export default class Host {
    */
   addBlock(time: number, block: BlockObj): void {
     this.addAction(time, ['Updated the blockchain']);
-    this.chain.addBlock();
+    this.chain.addBlock('dummy-block-data');
   }
 
   /**
    * When this host is the leader, it can propose a new block
    * @param time The time value when the leader proposed a new block
+   * @param lastBlock The last block in the blockchain
    * @returns The proposed **BlockObj**, or null if the host is not a leader
    */
-  proposeBlock(time: number): BlockObj | null {
+  proposeBlock(time: number, lastBlock: BlockObj): BlockObj | null {
     if (this.role === Role.Leader) {
       this.lastLeaderTime = time;
       this.addAction(time, ['Proposed a new block']);
-      return new BlockObj();
+      return BlockObj.createBlock(
+        lastBlock.getBlockId() + 1,
+        lastBlock,
+        'dummy-block-data'
+      );
     }
     return null;
   }
