@@ -11,6 +11,7 @@ import {
 export default function Host() {
   return (
     <div className="HostView">
+      <h1>Host View</h1>
       <p> Host Id: {} </p>
       <Stack>
         <UnorderedList>
