@@ -58,11 +58,47 @@ export default class ChainObj {
   }
 
   /**
+   * Gets BlockObj at index idx if valid idx
+   * @param idx index of block in chain (indexed by 0)
+   * @returns BlockObj or null if invalid
+   */
+  getBlock(idx: number): BlockObj | null {
+    if (idx >= 0 && idx < this.chain.length) {
+      return this.chain[idx];
+    }
+    return null;
+  }
+
+  /**
    * Gets chain as list of blockObj
    * @returns chain
    */
   getChain(): BlockObj[] {
     return this.chain;
+  }
+
+  /**
+   * Sets chainId
+   * @param chainId
+   */
+  setId(chainId: number): void {
+    this.chainId = chainId;
+  }
+
+  /**
+   * Sets version
+   * @param version
+   */
+  setVersion(version: number): void {
+    this.version = version;
+  }
+
+  /**
+   * Sets chain
+   * @param chain
+   */
+  setChain(chain: BlockObj[]): void {
+    this.chain = chain;
   }
 
   /**
@@ -93,21 +129,6 @@ export default class ChainObj {
       }
     }
     return true;
-  }
-
-  /**
-   * Given another chain object, check if their version is newer, if so,
-   * then update this chain's version and return true
-   * TODO: deprecate this function and use replaceChain
-   * @param refChain
-   * @returns boolean of whether or not passed in chain is newer
-   */
-  updateChain(refChain: ChainObj): boolean {
-    if (refChain.version > this.version) {
-      this.version = refChain.version;
-      return true;
-    }
-    return false;
   }
 
   /**

@@ -2,14 +2,14 @@ import CryptoJS from 'crypto-js';
 
 export default class BlockObj {
   private blockId: number;
-  private blockName: string; // TODO: Unused
-  private timestamp: number; // creation time
-  private valid: boolean;
+  private blockName: string; // TODO: Unused, can be set by host and added to hash
+  private timestamp: string; // creation time
+  private valid: boolean; // TODO: In host class, add validate() function to set validatorId and valid = true
   private blockData: string;
   private hash: string;
   private lastHash: string;
-  private validatorId: number; // TODO: Unused, need to update
-  private signature: string; // TODO: unused, need to update
+  private validatorId: number; // TODO: In host class, add validate() function to set validatorId and valid = true
+  private signature: string; // TODO: unused, needed?
 
   /**
    * Block object
@@ -21,12 +21,12 @@ export default class BlockObj {
    * @param hash hash of block
    * @param lastHash hash of last block
    * @param validatorId id of validator that validated this block, -1 if not validated
-   * @param signature todo?
+   * @param signature TODO: needed?
    */
   constructor(
     blockId: number,
     blockName: string,
-    timestamp: number,
+    timestamp: string,
     valid: boolean,
     blockData: string,
     hash: string,
@@ -62,7 +62,7 @@ export default class BlockObj {
   /**
    * Get timestamp
    */
-  getTimestamp(): number {
+  getTimestamp(): string {
     return this.timestamp;
   }
 
@@ -145,7 +145,7 @@ export default class BlockObj {
    * Set timestamp and recalculate hash
    * Reset validity
    */
-  setTimestamp(timestamp: number): void {
+  setTimestamp(timestamp: string): void {
     this.timestamp = timestamp;
     this.hash = BlockObj.calculateHash(this);
     this.valid = false;
@@ -164,7 +164,7 @@ export default class BlockObj {
    */
   setBlockData(blockData: string): void {
     this.blockData = blockData;
-    this.timestamp = Date.now();
+    this.timestamp = String(Date.now());
     this.hash = BlockObj.calculateHash(this);
     this.valid = false;
   }
@@ -207,7 +207,7 @@ export default class BlockObj {
     return new this(
       0,
       'genesis block',
-      Date.now(),
+      'genesis time', // Note: need this as a constant for validity checking
       true,
       '',
       'genesis hash',
@@ -218,8 +218,8 @@ export default class BlockObj {
   }
 
   // Generate hash for given block info
-  // TODO: incorporate host in hash?, if so pass in hostId and hash it
-  static hash(timestamp: number, lastHash: string, blockData: string): string {
+  // TODO: incorporate blockname into hash or remove blockname param?
+  static hash(timestamp: string, lastHash: string, blockData: string): string {
     return CryptoJS.SHA256(`${timestamp}${lastHash}${blockData}`).toString(
       CryptoJS.enc.Hex
     ); // TODO: want encoded? ie. toString(CryptoJS.enc.Hex);
@@ -235,7 +235,7 @@ export default class BlockObj {
   }
 
   static createBlock(blockId: number, lastBlock: BlockObj, blockData: string): BlockObj {
-    let timestamp = Date.now();
+    let timestamp = String(Date.now());
     const lastHash = lastBlock.hash;
     let hash = BlockObj.hash(timestamp, lastHash, blockData);
     return new this(

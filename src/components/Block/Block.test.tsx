@@ -55,10 +55,12 @@ test('changing block data and recalculating hash', () => {
   // "Validate" all blocks
   for (let i = 0; i < NUM_TEST_BLOCKS; i++) {
     blocks[i].setValid(true);
+    expect(blocks[i].getValid()).toBeTruthy();
   }
   // Change a block data
   let changeIdx = Math.floor(NUM_TEST_BLOCKS / 2);
 
+  // Check that changed block is no longer valid
   let oldHash = blocks[changeIdx].getHash();
   blocks[changeIdx].setBlockData('temp new data');
   expect(oldHash !== blocks[changeIdx].getHash()).toBeTruthy();
