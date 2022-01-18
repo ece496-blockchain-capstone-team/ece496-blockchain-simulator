@@ -202,7 +202,11 @@ export default class BlockObj {
     this.signature = signature;
   }
 
-  // Use to generate the genesis block
+  /**
+   * Creates the genesis block (a constant block)
+   * The creation time is a constant for validity checking
+   * @returns genesis block
+   */
   static genesisBlock(): BlockObj {
     return new this(
       0,
@@ -234,6 +238,13 @@ export default class BlockObj {
     return BlockObj.hash(block.timestamp, block.lastHash, block.blockData);
   }
 
+  /**
+   * Create a block given a block id, the last block, and the data of the block
+   * @param blockId id of the block
+   * @param lastBlock last block in the chain (or block it will be attached to)
+   * @param blockData content of block
+   * @returns block created
+   */
   static createBlock(blockId: number, lastBlock: BlockObj, blockData: string): BlockObj {
     let timestamp = String(Date.now());
     const lastHash = lastBlock.hash;

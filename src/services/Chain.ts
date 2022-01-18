@@ -6,7 +6,13 @@ export default class ChainObj {
   private version: number;
   private chain: BlockObj[];
 
-  constructor() {
+  /**
+   * Create a chain given a chainId
+   * Default value of chainId = 0 if not provided
+   * @param chainId id of chain
+   */
+  constructor(chainId: number = 0) {
+    this.chainId = chainId;
     this.version = 1;
     this.chain = [BlockObj.genesisBlock()];
   }
@@ -35,6 +41,14 @@ export default class ChainObj {
     );
     this.chain.push(newBlock);
     return newBlock;
+  }
+
+  /**
+   * Forcibly add new block to end of chain (regardless of last block and hash calculation)
+   */
+  forceAddBlock(newBlock: BlockObj): void {
+    this.version += 1;
+    this.chain.push(newBlock);
   }
 
   // ***************************************************************************
