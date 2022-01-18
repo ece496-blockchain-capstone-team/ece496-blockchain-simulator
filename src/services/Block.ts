@@ -4,11 +4,11 @@ export default class BlockObj {
   private blockId: number;
   private blockName: string; // TODO: Unused, can be set by host and added to hash
   private timestamp: string; // creation time
-  private valid: boolean; // TODO: In host class, add validate() function to set validatorId and valid = true
+  private valid: boolean;
   private blockData: string;
   private hash: string;
   private lastHash: string;
-  private validatorId: number; // TODO: In host class, add validate() function to set validatorId and valid = true
+  private validatorId: number;
   private signature: string; // TODO: unused, needed?
 
   /**
