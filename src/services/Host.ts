@@ -154,36 +154,58 @@ export default class Host {
   }
 
   /**
-   * This host votes on a block. Currently, the host always votes yes.
+   * This host votes on a block. The host must be a validator in order to
+   * validate the block. The host checks that the block's last hash is the
+   * same as the last block in the host's chain. Then, the host checks that
+   * the new block's hash is correctly calculated.
    * @param time The time value when the validation was performed
    * @param block The **BlockObj** for validation
+   * (under assumption that it will be added to end of host chain)
    * @returns The decision of the host
    */
   validateBlock(time: number, block: BlockObj): boolean {
-    this.addAction(time, ['Validated a block']);
-    return true;
+    let validated =
+      this.getRole() === Host.Role.Leader &&
+      block.getLastHash() === this.getChain().getLastBlock().getHash() &&
+      block.getHash() === BlockObj.calculateHash(block);
+    // Valid block
+    if (validated) {
+      block.setValid(validated);
+      block.setValidatorId(this.nodeId);
+      this.addAction(time, ['Validated a block']);
+      return true;
+    }
+    // Invalid block
+    this.addAction(time, ['Failed to validate block']);
+    return false;
   }
 
   /**
-   * Updates the host's blockchain with a new block
+   * Updates the host's blockchain with a new block regardless of validity of
+   * the block
    * @param time The time value when the block was added
    * @param block The **BlockObj** to be added
    */
-  addBlock(time: number, block: BlockObj): void {
+  forceAddBlock(time: number, block: BlockObj): void {
     this.addAction(time, ['Updated the blockchain']);
-    this.chain.addBlock();
+    this.chain.forceAddBlock(block);
   }
 
   /**
    * When this host is the leader, it can propose a new block
    * @param time The time value when the leader proposed a new block
+   * @param lastBlock The last block in the blockchain
    * @returns The proposed **BlockObj**, or null if the host is not a leader
    */
-  proposeBlock(time: number): BlockObj | null {
+  proposeBlock(time: number, lastBlock: BlockObj): BlockObj | null {
     if (this.role === Role.Leader) {
       this.lastLeaderTime = time;
       this.addAction(time, ['Proposed a new block']);
-      return new BlockObj();
+      return BlockObj.createBlock(
+        lastBlock.getBlockId() + 1,
+        lastBlock,
+        'dummy-block-data'
+      );
     }
     return null;
   }

@@ -37,7 +37,7 @@ export default class NetworkObj {
         'Node ' +
           String(this.nodeList[i].getId()) +
           ': ' +
-          String(this.nodeList[i].getChain().version)
+          String(this.nodeList[i].getChain().getVersion())
       );
     }
     return 1;
