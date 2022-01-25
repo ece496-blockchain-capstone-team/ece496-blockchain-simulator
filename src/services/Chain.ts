@@ -1,4 +1,3 @@
-import { Block } from 'typescript';
 import BlockObj from './Block';
 
 export default class ChainObj {
