@@ -17,7 +17,7 @@ const networkReducer = createReducer(
 
       state.timeCounter += stepAmount;
       for (let i = 0; i < state.nodeList.length; i++) {
-        state.nodeList[i].takeAction(state.timeCounter);
+        state.nodeList[i].getAction(state.timeCounter); // TODO: Only retrieves action, need to perform it in a way that does not mutate!!
       }
     },
     [initNetwork.type]: (state, action) => {

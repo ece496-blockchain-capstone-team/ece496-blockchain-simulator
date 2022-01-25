@@ -20,7 +20,7 @@ import NetworkObj from '../../services/Network';
 // }
 
 export default function Network() {
-  return <div> </div>;
+  return <div> Network View </div>;
 
   // let network = new NetworkObj(5);
 

@@ -8,6 +8,7 @@ import NavBar from './components/NavBar';
 import Home from './components/Home';
 import Network from './components/Network';
 import Host from './components/Host';
+import Chain from './components/Chain';
 import Block from './components/Block';
 
 export default function App() {
@@ -18,6 +19,7 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/network" element={<Network />} />
         <Route path="/host" element={<Host />} />
+        <Route path="/chain" element={<Chain />} />
         <Route path="/block" element={<Block />} />
       </Routes>
     </ChakraProvider>

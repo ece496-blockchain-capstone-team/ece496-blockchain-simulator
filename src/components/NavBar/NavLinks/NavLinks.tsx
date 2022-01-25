@@ -9,10 +9,11 @@ export default function NavLinks() {
       display={{ base: 'block', md: 'block' }}
       flexBasis={{ base: '100%', md: 'auto' }}
     >
-      <Stack spacing={4} align="center" justify="center" direction="row">
+      <Stack spacing={5} align="center" justify="center" direction="row">
         <LinkItem to="/">Home</LinkItem>
         <LinkItem to="/network">Network</LinkItem>
         <LinkItem to="/host">Host</LinkItem>
+        <LinkItem to="/chain">Chain</LinkItem>
         <LinkItem to="/block">Block</LinkItem>
       </Stack>
     </Box>
