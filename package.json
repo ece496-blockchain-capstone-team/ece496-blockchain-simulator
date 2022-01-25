@@ -6,8 +6,6 @@
     "@chakra-ui/react": "^1.7.1",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
-    "@redux-devtools/core": "^3.10.1",
-    "@redux-devtools/log-monitor": "^3.0.1",
     "@reduxjs/toolkit": "^1.7.1",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
