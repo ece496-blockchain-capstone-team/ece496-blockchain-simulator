@@ -9,7 +9,7 @@ const chooseValidator = createAction<void, 'chooseValidator'>('chooseValidator')
 const networkReducer = createReducer(
   {
     validator: null,
-    nodeList: [],
+    nodes: [],
     timeCounter: 0,
   } as Network,
   {
@@ -17,8 +17,8 @@ const networkReducer = createReducer(
       const stepAmount = action.payload;
 
       state.timeCounter += stepAmount;
-      for (let i = 0; i < state.nodeList.length; i++) {
-        state.nodeList[i].getAction(state.timeCounter); // TODO: Only retrieves action, need to perform it in a way that does not mutate!!
+      for (let i = 0; i < state.nodes.length; i++) {
+        state.nodes[i].getAction(state.timeCounter); // TODO: Only retrieves action, need to perform it in a way that does not mutate!!
       }
     },
     [initNetwork.type]: (state, action) => {
@@ -30,8 +30,8 @@ const networkReducer = createReducer(
       // };
     },
     [chooseValidator.type]: (state, action) => {
-      let randomNum = Math.floor(Math.random() * state.nodeList.length);
-      state.validator = state.nodeList[randomNum];
+      let randomNum = Math.floor(Math.random() * state.nodes.length);
+      state.validator = state.nodes[randomNum].getId();
     },
   }
 );
