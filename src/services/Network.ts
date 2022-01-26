@@ -1,9 +1,9 @@
 import Host, { NodeId } from './Host';
-import Location from './Location';
+import Location, { LocationId } from './Location';
 
 export default interface NetworkObj {
   validator: NodeId | null;
-  nodes: Host[];
-  locations: Location[];
+  nodes: { [id: NodeId]: Host };
+  locations: { [id: LocationId]: Location };
   timeCounter: number;
 }

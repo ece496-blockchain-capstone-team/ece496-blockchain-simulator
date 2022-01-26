@@ -18,9 +18,7 @@ const networkReducer = createReducer(
       const stepAmount = action.payload;
 
       state.timeCounter += stepAmount;
-      for (let i = 0; i < state.nodes.length; i++) {
-        state.nodes[i].getAction(state.timeCounter); // TODO: Only retrieves action, need to perform it in a way that does not mutate!!
-      }
+      Object.values(state.nodes).forEach((node) => node.getAction(state.timeCounter)); // TODO: Only retrieves action, need to perform it in a way that does not mutate!!
     },
     [initNetwork.type]: (state, action) => {
       state.timeCounter = 1;
@@ -31,8 +29,8 @@ const networkReducer = createReducer(
       // };
     },
     [chooseValidator.type]: (state, action) => {
-      let randomNum = Math.floor(Math.random() * state.nodes.length);
-      state.validator = state.nodes[randomNum].getId();
+      let randomNum = Math.floor(Math.random() * Object.values(state.nodes).length);
+      state.validator = Object.values(state.nodes)[randomNum].getId();
     },
   }
 );
