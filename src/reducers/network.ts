@@ -1,6 +1,6 @@
 import { createReducer, createAction, PayloadAction } from '@reduxjs/toolkit';
 
-import { Network } from '../services';
+import { Host, Network } from '../services';
 
 const timeStep = createAction<number, 'timestep'>('timestep');
 const initNetwork = createAction<void, 'initNetwork'>('initNetwork');
@@ -22,11 +22,28 @@ const networkReducer = createReducer(
     },
     [initNetwork.type]: (state, action) => {
       state.timeCounter = 1;
-      // for (let nodeid = 0; nodeid < numNodes; nodeid++){
-      //     let hostRole = new HostRole("general");
-      //     let tempHost = new Host(nodeid, hostRole, []);
-      //     this.nodeList.push(tempHost);
-      // };
+
+      // Add new locations
+      state.locations[0] = {
+        id: 0,
+        latitude: 0,
+        longitude: 0,
+      };
+
+      state.locations[1] = {
+        id: 1,
+        latitude: 0,
+        longitude: 0,
+      };
+
+      // Add new nodes
+      state.nodes[0] = new Host(0, 'Test 1', 0, 0, undefined, undefined);
+
+      state.nodes[1] = new Host(1, 'Test 2', 1, 0, undefined, undefined);
+
+      // Connect new nodes together
+      state.nodes[0].addConnectedNodes([1]);
+      state.nodes[1].addConnectedNodes([0]);
     },
     [chooseValidator.type]: (state, action) => {
       let randomNum = Math.floor(Math.random() * Object.values(state.nodes).length);
