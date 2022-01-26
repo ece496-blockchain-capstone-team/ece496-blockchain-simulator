@@ -105,7 +105,7 @@ export default class Host {
    */
   addConnectedNodes(nodes: NodeId[]): void {
     nodes.forEach((nodeId) =>
-      this.connectedNodes.includes(nodeId) ? this.connectedNodes.push(nodeId) : null
+      this.connectedNodes.includes(nodeId) ? null : this.connectedNodes.push(nodeId)
     );
   }
 
