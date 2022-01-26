@@ -28,6 +28,14 @@ yarn prepare
 
 5) Happy coding!
 
+## Setting Up redux-devtools
+
+To set up your browser to be able to view the redux store, go through the following steps:
+
+1) Follow installation [instructions](https://github.com/reduxjs/redux-devtools/tree/main/extension#installation)
+2) Your browser should now be set up to view when starting the application.
+3) Happy viewing!
+
 ## Available Scripts
 
 In the project directory, you can run:

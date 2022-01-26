@@ -46,6 +46,7 @@
         "class-methods-use-this": "off",
         "no-console": "off",
         "react/no-unused-state": "off",
-        "prefer-template": "off"
+        "prefer-template": "off",
+        "no-param-reassign": "off"
     }
 }
