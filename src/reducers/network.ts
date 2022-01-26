@@ -10,6 +10,7 @@ const networkReducer = createReducer(
   {
     validator: null,
     nodes: [],
+    locations: [],
     timeCounter: 0,
   } as Network,
   {
