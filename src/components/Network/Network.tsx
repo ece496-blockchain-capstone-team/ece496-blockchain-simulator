@@ -29,7 +29,12 @@ export default function Network() {
       <Box m={4}>
         <Heading> Network View </Heading>
       </Box>
-      <Box position="absolute" height={window.innerHeight} width={window.innerWidth}>
+      <Box
+        position="absolute"
+        top={0}
+        height={window.innerHeight}
+        width={window.innerWidth}
+      >
         <DeckGL
           initialViewState={INITIAL_VIEW_STATE}
           controller
