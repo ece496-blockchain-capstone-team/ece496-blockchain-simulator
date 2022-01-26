@@ -104,11 +104,9 @@ export default class Host {
    * @param nodes A list of **NodeId**s to connect to this host
    */
   addConnectedNodes(nodes: NodeId[]): void {
-    for (let i = 0; i < nodes.length; i++) {
-      if (!this.connectedNodes.includes(nodes[i])) {
-        this.connectedNodes.push(nodes[i]);
-      }
-    }
+    nodes.forEach((nodeId) =>
+      this.connectedNodes.includes(nodeId) ? this.connectedNodes.push(nodeId) : null
+    );
   }
 
   /**
