@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import DeckGL from '@deck.gl/react';
 import { LineLayer } from '@deck.gl/layers';
 
-import { Grid, GridItem, Heading, Divider } from '@chakra-ui/react';
+import { Flex, Heading, Box, Portal } from '@chakra-ui/react';
+import { _MapContext as MapContext, NavigationControl } from 'react-map-gl';
 
 // Viewport settings
 const INITIAL_VIEW_STATE = {
@@ -19,17 +20,27 @@ const data = [
 ];
 
 export default function Network() {
+  const ref = React.useRef();
+
   const layers = [new LineLayer({ id: 'line-layer', data })];
 
   return (
-    <Grid w="100%" p={4} gap={4}>
-      <GridItem>
+    <Flex>
+      <Box m={4}>
         <Heading> Network View </Heading>
-      </GridItem>
-      <Divider />
-      <GridItem>
-        <DeckGL initialViewState={INITIAL_VIEW_STATE} controller layers={layers} />
-      </GridItem>
-    </Grid>
+      </Box>
+      <Box position="absolute" height={window.innerHeight} width={window.innerWidth}>
+        <DeckGL
+          initialViewState={INITIAL_VIEW_STATE}
+          controller
+          layers={layers}
+          ContextProvider={MapContext.Provider}
+        >
+          <div>
+            <NavigationControl />
+          </div>
+        </DeckGL>
+      </Box>
+    </Flex>
   );
 }

@@ -8,7 +8,7 @@ import ColorModeSwitcher from './ColorModeSwitcher';
 
 export default function NavBar() {
   return (
-    <Box mb={8}>
+    <Box bg="teal.300" zIndex={1} position="relative">
       <Flex as="nav" align="center" justify="space-between" wrap="wrap" w="100%" p={8}>
         <Stack spacing={8} align="center" justify="center" direction="row">
           <Logo w="100px" />
