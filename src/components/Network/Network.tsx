@@ -1,8 +1,8 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import DeckGL from '@deck.gl/react';
 import { LineLayer } from '@deck.gl/layers';
 
-import { Flex, Heading, Box, Portal } from '@chakra-ui/react';
+import { Flex, Heading, Box } from '@chakra-ui/react';
 import { _MapContext as MapContext, NavigationControl } from 'react-map-gl';
 
 // Viewport settings
