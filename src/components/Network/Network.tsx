@@ -1,24 +1,35 @@
-import React, { useState } from 'react';
-import {
-  Box,
-  Stack,
-  Button,
-  Table,
-  Thead,
-  Tbody,
-  Tfoot,
-  Tr,
-  Th,
-  Td,
-  TableCaption,
-} from '@chakra-ui/react';
-import NetworkObj from '../../services/Network';
+import React from 'react';
+import DeckGL from '@deck.gl/react';
+import { LineLayer } from '@deck.gl/layers';
 
-// function useForceUpdate() {
-//   const [value, setValue] = useState(0); // integer state
-//   return () => setValue(val => val + 1); // update the state to force render
-// }
+import { Grid, GridItem, Heading, Divider } from '@chakra-ui/react';
+
+// Viewport settings
+const INITIAL_VIEW_STATE = {
+  longitude: -122.41669,
+  latitude: 37.7853,
+  zoom: 13,
+  pitch: 0,
+  bearing: 0,
+};
+
+// Data to be used by the LineLayer
+const data = [
+  { sourcePosition: [-122.41669, 37.7853], targetPosition: [-122.41669, 37.781] },
+];
 
 export default function Network() {
-  return <div className="NetworkView">Network View</div>;
+  const layers = [new LineLayer({ id: 'line-layer', data })];
+
+  return (
+    <Grid w="100%" p={4} gap={4}>
+      <GridItem>
+        <Heading> Network View </Heading>
+      </GridItem>
+      <Divider />
+      <GridItem>
+        <DeckGL initialViewState={INITIAL_VIEW_STATE} controller layers={layers} />
+      </GridItem>
+    </Grid>
+  );
 }
