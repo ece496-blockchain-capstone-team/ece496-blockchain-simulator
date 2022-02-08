@@ -8,6 +8,8 @@ enum Role { // eslint-disable-line no-shadow
   Malicious = 'Malicious',
 }
 
+export type NodeId = number;
+
 /**
  * # Host
  * <br/>
@@ -17,7 +19,7 @@ export default class Host {
   /**
    * The unique ID number for the host
    */
-  private nodeId: number;
+  private nodeId: NodeId;
   /**
    * A name for the host
    */
@@ -31,9 +33,9 @@ export default class Host {
    */
   private locationId: number;
   /**
-   * A list of **Host** that are connected to this host
+   * A list of **NodeId**s that are connected to this host
    */
-  private connectedNodes: Host[] = [];
+  private connectedNodes: NodeId[] = [];
   /**
    * The most recent time value when this node was the leader
    */
@@ -71,7 +73,7 @@ export default class Host {
    * @param location The ID of the geographical location that the host is in
    * @param stake The amount of currency that the host has deposited
    * @param role The role that this host is currently performing
-   * @param connections A list of **Host** that are connected to this host
+   * @param connections A list of **NodeId**s that are connected to this host
    */
   constructor(
     id: number,
@@ -79,7 +81,7 @@ export default class Host {
     location: number,
     stake: number,
     role?: Role,
-    connections?: Host[]
+    connections?: NodeId[]
   ) {
     this.nodeId = id;
     this.nodeName = name;
@@ -99,22 +101,20 @@ export default class Host {
 
   /**
    * Connects one or more hosts to this host
-   * @param nodes A list of **Host** to connect to this host
+   * @param nodes A list of **NodeId**s to connect to this host
    */
-  addConnectedNodes(nodes: Host[]): void {
-    for (let i = 0; i < nodes.length; i++) {
-      if (!this.connectedNodes.includes(nodes[i])) {
-        this.connectedNodes.push(nodes[i]);
-      }
-    }
+  addConnectedNodes(nodes: NodeId[]): void {
+    nodes.forEach((nodeId) =>
+      this.connectedNodes.includes(nodeId) ? null : this.connectedNodes.push(nodeId)
+    );
   }
 
   /**
    * Helper function for removing a node from this host's list of connected nodes
-   * @param node A **Host** currently connected to this host
+   * @param node A **NodeId** currently connected to this host
    * @returns Whether the disconnection was successful for this host
    */
-  private removeConnectedNode(node: Host): boolean {
+  private removeConnectedNode(node: NodeId): boolean {
     const index = this.connectedNodes.indexOf(node);
     if (index > -1) {
       this.connectedNodes.splice(index, 1);
@@ -129,7 +129,10 @@ export default class Host {
    * @returns Whether the disconnection was successful
    */
   disconnectFrom(node: Host): boolean {
-    if (this.removeConnectedNode(node) && node.removeConnectedNode(this)) {
+    if (
+      this.removeConnectedNode(node.getId()) &&
+      node.removeConnectedNode(this.getId())
+    ) {
       return true;
     }
     return false;
@@ -273,9 +276,9 @@ export default class Host {
   }
 
   /**
-   * @returns A list of **Host** that are connected to this host
+   * @returns A list of **NodeId**s that are connected to this host
    */
-  getConnectedNodes(): Host[] {
+  getConnectedNodes(): NodeId[] {
     return this.connectedNodes;
   }
 
