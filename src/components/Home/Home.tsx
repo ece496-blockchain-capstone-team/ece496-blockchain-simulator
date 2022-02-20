@@ -3,7 +3,7 @@ import { Button, Grid, Heading } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 
 export default function Home() {
-  let navigate = useNavigate();
+  const navigate = useNavigate();
 
   function toggleItemDisplay(itemName: string) {
     let options = document.getElementById('options');
