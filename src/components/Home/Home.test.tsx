@@ -4,7 +4,11 @@ import { MemoryRouter as Router } from 'react-router-dom';
 import Home from '../Home';
 
 test('home is rendered', () => {
-  render(<Home />);
+  render(
+    <Router>
+      <Home />
+    </Router>
+  );
   const element = screen.getByText(/Simulation Settings/i);
   expect(element).toBeInTheDocument();
 });
