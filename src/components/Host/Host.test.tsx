@@ -43,33 +43,33 @@ test('renders test paragraph for host view', () => {
 test('hosts can connect to other hosts', () => {
   let hosts = setupHostsList(MIN_HOST_SUPPORT);
   // set up a small network
-  hosts[0].addConnectedNodes([hosts[1], hosts[2]]);
-  hosts[1].addConnectedNodes([hosts[0], hosts[3]]);
-  hosts[2].addConnectedNodes([hosts[0], hosts[3]]);
-  hosts[3].addConnectedNodes([hosts[1], hosts[2]]);
+  hosts[0].addConnectedNodes([hosts[1].getId(), hosts[2].getId()]);
+  hosts[1].addConnectedNodes([hosts[0].getId(), hosts[3].getId()]);
+  hosts[2].addConnectedNodes([hosts[0].getId(), hosts[3].getId()]);
+  hosts[3].addConnectedNodes([hosts[1].getId(), hosts[2].getId()]);
 
   // try to add duplicate nodes
-  hosts[0].addConnectedNodes([hosts[2], hosts[1]]);
+  hosts[0].addConnectedNodes([hosts[2].getId(), hosts[1].getId()]);
 
-  expect(hosts[0].getConnectedNodes()[0].getId()).toBe(1);
-  expect(hosts[0].getConnectedNodes()[1].getId()).toBe(2);
+  expect(hosts[0].getConnectedNodes()[0]).toBe(1);
+  expect(hosts[0].getConnectedNodes()[1]).toBe(2);
   expect(hosts[0].getConnectedNodes().length).toBe(2);
 });
 
 test('hosts can disconnect from other hosts', () => {
   let hosts = setupHostsList(MIN_HOST_SUPPORT);
   // set up a small network
-  hosts[0].addConnectedNodes([hosts[1], hosts[2]]);
-  hosts[1].addConnectedNodes([hosts[0], hosts[3]]);
-  hosts[2].addConnectedNodes([hosts[0], hosts[3]]);
-  hosts[3].addConnectedNodes([hosts[1], hosts[2]]);
+  hosts[0].addConnectedNodes([hosts[1].getId(), hosts[2].getId()]);
+  hosts[1].addConnectedNodes([hosts[0].getId(), hosts[3].getId()]);
+  hosts[2].addConnectedNodes([hosts[0].getId(), hosts[3].getId()]);
+  hosts[3].addConnectedNodes([hosts[1].getId(), hosts[2].getId()]);
 
   let removed = hosts[0].disconnectFrom(hosts[1]);
 
   expect(removed).toBeTruthy();
-  expect(hosts[0].getConnectedNodes()[0].getId()).toBe(2);
+  expect(hosts[0].getConnectedNodes()[0]).toBe(2);
   expect(hosts[0].getConnectedNodes().length).toBe(1);
-  expect(hosts[1].getConnectedNodes()[0].getId()).toBe(3);
+  expect(hosts[1].getConnectedNodes()[0]).toBe(3);
   expect(hosts[1].getConnectedNodes().length).toBe(1);
 });
 

@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+
 import DeckGL from '@deck.gl/react';
 import { LineLayer } from '@deck.gl/layers';
 
 import { Flex, Heading, Box } from '@chakra-ui/react';
 import { _MapContext as MapContext, NavigationControl } from 'react-map-gl';
+
+import { useAppDispatch } from '../../store';
+import { network } from '../../slices';
 
 // Viewport settings
 const INITIAL_VIEW_STATE = {
@@ -23,6 +27,12 @@ export default function Network() {
   const ref = React.useRef();
 
   const layers = [new LineLayer({ id: 'line-layer', data })];
+
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(network.actions.init());
+  }, []);
 
   return (
     <Flex>
