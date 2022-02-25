@@ -1,4 +1,5 @@
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import {
   Heading,
@@ -12,27 +13,28 @@ import {
   NumberIncrementStepper,
   NumberDecrementStepper,
 } from '@chakra-ui/react';
-
-const simulationSettings = {
-  stake: 1,
-  votingPower: 1,
-  electionMethod: 1,
-  blockSize: 10,
-};
+import settings from '../../slices/settings';
+import { RootState } from '../../store';
 
 export default function SimulationSettings() {
-  const [stake, setStake] = React.useState(simulationSettings.stake);
-  const [votingPower, setVotingPower] = React.useState(simulationSettings.votingPower);
-  const [electionMethod, setElectionMethod] = React.useState(
-    simulationSettings.electionMethod
+  const { stake, electionAlgo, votingPower, antiMaliciousAlgo, blockSize } = useSelector(
+    (state: RootState) => state.settings
   );
-  const [blockSize, setBlockSize] = React.useState(simulationSettings.blockSize);
+  const dispatch = useDispatch();
+
+  const [newStake, setNewStake] = React.useState(stake);
+  const [newVotingPower, setNewVotingPower] = React.useState(votingPower);
+  const [newElectionAlgo, setNewElectionAlgo] = React.useState(electionAlgo);
+  const [newBlockSize, setNewBlockSize] = React.useState(blockSize);
+  const [newAntiMaliciousAlgo, setNewAntiMaliciousAlgo] =
+    React.useState(antiMaliciousAlgo);
 
   function saveSettings() {
-    simulationSettings.stake = stake;
-    simulationSettings.votingPower = votingPower;
-    simulationSettings.electionMethod = electionMethod;
-    simulationSettings.blockSize = blockSize;
+    dispatch(settings.actions.setStake(newStake));
+    dispatch(settings.actions.setElectionAlgo(newElectionAlgo));
+    dispatch(settings.actions.setVotingPower(newVotingPower));
+    dispatch(settings.actions.setAntiMaliciousAlgo(newAntiMaliciousAlgo));
+    dispatch(settings.actions.setBlockSize(newBlockSize));
   }
 
   return (
@@ -40,7 +42,11 @@ export default function SimulationSettings() {
       <Heading size="lg">Simulation Settings</Heading>
       <br />
       <Heading size="sm">Staking</Heading>
-      <RadioGroup value={stake} onChange={(e) => setStake(parseInt(e, 10))}>
+      <RadioGroup
+        id="sss"
+        value={newStake}
+        onChange={(e) => setNewStake(parseInt(e, 10))}
+      >
         <Stack>
           <Radio value={1}>Same stake for every host</Radio>
           <Radio value={2}>Random stake</Radio>
@@ -48,7 +54,10 @@ export default function SimulationSettings() {
       </RadioGroup>
       <br />
       <Heading size="sm">Voting Power</Heading>
-      <RadioGroup value={votingPower} onChange={(e) => setVotingPower(parseInt(e, 10))}>
+      <RadioGroup
+        value={newVotingPower}
+        onChange={(e) => setNewVotingPower(parseInt(e, 10))}
+      >
         <Stack>
           <Radio value={1}>Host&apos;s stake divided by total stake</Radio>
           <Radio value={2}>Equal voting power for all hosts</Radio>
@@ -57,8 +66,8 @@ export default function SimulationSettings() {
       <br />
       <Heading size="sm">Leader Election Method</Heading>
       <RadioGroup
-        value={electionMethod}
-        onChange={(e) => setElectionMethod(parseInt(e, 10))}
+        value={newElectionAlgo}
+        onChange={(e) => setNewElectionAlgo(parseInt(e, 10))}
       >
         <Stack>
           <Radio value={1}>Round robin, ordered by voting power</Radio>
@@ -67,12 +76,23 @@ export default function SimulationSettings() {
         </Stack>
       </RadioGroup>
       <br />
+      <Heading size="sm">Anti-Malicious Algorithm</Heading>
+      <RadioGroup
+        value={newAntiMaliciousAlgo}
+        onChange={(e) => setNewAntiMaliciousAlgo(parseInt(e, 10))}
+      >
+        <Stack>
+          <Radio value={1}>None</Radio>
+          <Radio value={2}>Byzantine Fault Tolerance</Radio>
+        </Stack>
+      </RadioGroup>
+      <br />
       <Heading size="sm">Block Size in KiB:</Heading>
       <NumberInput
         size="md"
         maxW={24}
-        value={blockSize}
-        onChange={(e) => setBlockSize(parseInt(e, 10))}
+        value={newBlockSize}
+        onChange={(e) => setNewBlockSize(parseInt(e, 10))}
       >
         <NumberInputField />
         <NumberInputStepper>
