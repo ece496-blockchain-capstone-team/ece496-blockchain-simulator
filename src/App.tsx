@@ -10,18 +10,24 @@ import Network from './components/Network';
 import Host from './components/Host';
 import Chain from './components/Chain';
 import Block from './components/Block';
+import SimulationSettings from './components/SimulationSettings';
+
+import './global.css';
 
 export default function App() {
   return (
     <ChakraProvider>
       <NavBar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/network" element={<Network />} />
-        <Route path="/host" element={<Host />} />
-        <Route path="/chain" element={<Chain />} />
-        <Route path="/block" element={<Block />} />
-      </Routes>
+      <div className="main">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/network" element={<Network />} />
+          <Route path="/host" element={<Host />} />
+          <Route path="/chain" element={<Chain />} />
+          <Route path="/block" element={<Block />} />
+          <Route path="/simulation-settings" element={<SimulationSettings />} />
+        </Routes>
+      </div>
     </ChakraProvider>
   );
 }
