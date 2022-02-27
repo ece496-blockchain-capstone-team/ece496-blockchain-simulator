@@ -32,13 +32,13 @@ const network = createSlice({
         locations: {
           0: {
             id: 0,
-            latitude: 0,
-            longitude: 0,
+            latitude: 37.54560327062006,
+            longitude: -77.44554131810912,
           },
           1: {
             id: 1,
-            latitude: 0,
-            longitude: 0,
+            latitude: 47.673416976459634,
+            longitude: -122.11814177692641,
           },
         },
         nodes: {

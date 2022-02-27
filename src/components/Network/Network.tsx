@@ -1,13 +1,14 @@
 import React, { useEffect } from 'react';
 
 import DeckGL from '@deck.gl/react';
-import { LineLayer } from '@deck.gl/layers';
+import { IconLayer } from '@deck.gl/layers';
 
 import { Flex, Heading, Box } from '@chakra-ui/react';
 import { StaticMap, MapContext, NavigationControl } from 'react-map-gl';
 
 import { useAppDispatch, useAppSelector } from '../../store';
 import { network } from '../../slices';
+import { LocationTable, Location } from '../../services';
 
 // Viewport settings
 const INITIAL_VIEW_STATE = {
@@ -26,10 +27,10 @@ const NAV_CONTROL_STYLE = {
   left: 10,
 };
 
-// Data to be used by the LineLayer
-const data = [
-  { sourcePosition: [-122.41669, 37.7853], targetPosition: [-122.41669, 37.781] },
-];
+// Icon Layer
+const ICON_MAPPING = {
+  marker: { x: 0, y: 0, width: 128, height: 128, mask: true },
+};
 
 export default function Network() {
   const dispatch = useAppDispatch();
@@ -38,9 +39,24 @@ export default function Network() {
     dispatch(network.actions.init());
   }, []);
 
-  const layers = [new LineLayer({ id: 'line-layer', data })];
+  const locations: LocationTable = useAppSelector(
+    (state) => state.network.locations
+  ) as LocationTable;
 
-  const locations = useAppSelector((state) => state.network.locations);
+  const iconLayer = new IconLayer<Location>({
+    id: 'location-layer',
+    data: Object.values(locations),
+    pickable: true,
+    iconAtlas:
+      'https://raw.githubusercontent.com/visgl/deck.gl-data/master/website/icon-atlas.png',
+    iconMapping: ICON_MAPPING,
+    getIcon: (d) => 'marker',
+
+    sizeScale: 15,
+    getPosition: (d) => [d.longitude, d.latitude],
+    getSize: (d) => 5,
+    getColor: (d) => [140, 140, 140],
+  });
 
   return (
     <Flex>
@@ -56,7 +72,7 @@ export default function Network() {
         <DeckGL
           initialViewState={INITIAL_VIEW_STATE}
           controller
-          layers={layers}
+          layers={[iconLayer]}
           ContextProvider={MapContext.Provider}
         >
           <StaticMap

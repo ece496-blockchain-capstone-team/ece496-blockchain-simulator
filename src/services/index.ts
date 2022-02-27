@@ -1,4 +1,4 @@
-export type { default as Network } from './Network';
+export type { default as Network, LocationTable, NodeTable } from './Network';
 export type { default as Location, LocationId } from './Location';
 export type { NodeId } from './Host';
 
