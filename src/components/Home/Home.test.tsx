@@ -9,6 +9,8 @@ test('home is rendered', () => {
       <Home />
     </Router>
   );
-  const element = screen.getByText(/Simulation Settings/i);
-  expect(element).toBeInTheDocument();
+  const simSettingsElement = screen.getByText(/Simulation Settings/i);
+  const metricsElement = screen.getByText(/Metrics Dashboard/i);
+  expect(simSettingsElement).toBeInTheDocument();
+  expect(metricsElement).toBeInTheDocument();
 });

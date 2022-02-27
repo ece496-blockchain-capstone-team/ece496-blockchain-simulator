@@ -26,6 +26,9 @@ export default function Home() {
             Simulation Settings
           </Button>
           <Button size="lg">Start Simulation</Button>
+          <Button size="lg" onClick={() => navigate('/metrics')}>
+            Metrics Dashboard
+          </Button>
         </Grid>
       </div>
       <div id="introduction" hidden>
