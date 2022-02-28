@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Grid, Heading } from '@chakra-ui/react';
+import { Button, Grid, Heading, Box } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 
 export default function Home() {
@@ -16,29 +16,31 @@ export default function Home() {
 
   return (
     <div className="HomePage">
-      <div id="options">
-        <Grid templateColumns="repeat(2, 2fr)" gap={6} width={500}>
-          <Button size="lg" onClick={() => toggleItemDisplay('introduction')}>
-            Introduction
+      <Box p={4}>
+        <div id="options">
+          <Grid templateColumns="repeat(2, 2fr)" gap={6} width={500}>
+            <Button size="lg" onClick={() => toggleItemDisplay('introduction')}>
+              Introduction
+            </Button>
+            <Button size="lg">Create Network</Button>
+            <Button size="lg" onClick={() => navigate('/simulation-settings')}>
+              Simulation Settings
+            </Button>
+            <Button size="lg">Start Simulation</Button>
+            <Button size="lg" onClick={() => navigate('/metrics')}>
+              Metrics Dashboard
+            </Button>
+          </Grid>
+        </div>
+        <div id="introduction" hidden>
+          <Heading size="lg">Introduction</Heading>
+          <p>Welcome to the Blockchain Simulator.</p>
+          <br />
+          <Button size="sm" onClick={() => toggleItemDisplay('introduction')}>
+            Back
           </Button>
-          <Button size="lg">Create Network</Button>
-          <Button size="lg" onClick={() => navigate('/simulation-settings')}>
-            Simulation Settings
-          </Button>
-          <Button size="lg">Start Simulation</Button>
-          <Button size="lg" onClick={() => navigate('/metrics')}>
-            Metrics Dashboard
-          </Button>
-        </Grid>
-      </div>
-      <div id="introduction" hidden>
-        <Heading size="lg">Introduction</Heading>
-        <p>Welcome to the Blockchain Simulator.</p>
-        <br />
-        <Button size="sm" onClick={() => toggleItemDisplay('introduction')}>
-          Back
-        </Button>
-      </div>
+        </div>
+      </Box>
     </div>
   );
 }
