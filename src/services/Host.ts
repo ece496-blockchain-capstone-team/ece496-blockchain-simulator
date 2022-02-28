@@ -33,10 +33,6 @@ export default class Host {
    */
   private locationId: number;
   /**
-   * A list of **NodeId**s that are connected to this host
-   */
-  private connectedNodes: NodeId[] = [];
-  /**
    * The most recent time value when this node was the leader
    */
   private lastLeaderTime: number = 0;
@@ -73,16 +69,8 @@ export default class Host {
    * @param location The ID of the geographical location that the host is in
    * @param stake The amount of currency that the host has deposited
    * @param role The role that this host is currently performing
-   * @param connections A list of **NodeId**s that are connected to this host
    */
-  constructor(
-    id: number,
-    name: string,
-    location: number,
-    stake: number,
-    role?: Role,
-    connections?: NodeId[]
-  ) {
+  constructor(id: number, name: string, location: number, stake: number, role?: Role) {
     this.nodeId = id;
     this.nodeName = name;
     this.stake = stake;
@@ -92,50 +80,8 @@ export default class Host {
     } else {
       this.role = Role.General;
     }
-    if (connections) {
-      this.connectedNodes = connections;
-    }
     this.chain = new ChainObj();
     this.actions = new Actions();
-  }
-
-  /**
-   * Connects one or more hosts to this host
-   * @param nodes A list of **NodeId**s to connect to this host
-   */
-  addConnectedNodes(nodes: NodeId[]): void {
-    nodes.forEach((nodeId) =>
-      this.connectedNodes.includes(nodeId) ? null : this.connectedNodes.push(nodeId)
-    );
-  }
-
-  /**
-   * Helper function for removing a node from this host's list of connected nodes
-   * @param node A **NodeId** currently connected to this host
-   * @returns Whether the disconnection was successful for this host
-   */
-  private removeConnectedNode(node: NodeId): boolean {
-    const index = this.connectedNodes.indexOf(node);
-    if (index > -1) {
-      this.connectedNodes.splice(index, 1);
-      return true;
-    }
-    return false;
-  }
-
-  /**
-   * Disconnects this host from one other host, and disconnects that host form this host
-   * @param node A **Host** currently connected to this host
-   * @returns Whether the disconnection was successful
-   */
-  disconnectFrom(node: Host): boolean {
-    if (
-      this.removeConnectedNode(node.getId()) &&
-      node.removeConnectedNode(this.getId())
-    ) {
-      return true;
-    }
-    return false;
   }
 
   /**
@@ -273,13 +219,6 @@ export default class Host {
    */
   getStake(): number {
     return this.stake;
-  }
-
-  /**
-   * @returns A list of **NodeId**s that are connected to this host
-   */
-  getConnectedNodes(): NodeId[] {
-    return this.connectedNodes;
   }
 
   /**

@@ -1,14 +1,20 @@
 import React, { useEffect } from 'react';
 
 import DeckGL from '@deck.gl/react';
-import { IconLayer } from '@deck.gl/layers';
+import { IconLayer, ArcLayer } from '@deck.gl/layers';
 
 import { Flex, Heading, Box } from '@chakra-ui/react';
 import { StaticMap, MapContext, NavigationControl } from 'react-map-gl';
 
 import { useAppDispatch, useAppSelector } from '../../store';
 import { network } from '../../slices';
-import { LocationTable, Location } from '../../services';
+import {
+  LocationTable,
+  Location,
+  ConnectionType,
+  ConnectionTable,
+  NodeTable,
+} from '../../services';
 
 // Viewport settings
 const INITIAL_VIEW_STATE = {
@@ -39,9 +45,15 @@ export default function Network() {
     dispatch(network.actions.init());
   }, []);
 
+  const nodes: NodeTable = useAppSelector((state) => state.network.nodes) as NodeTable;
+
   const locations: LocationTable = useAppSelector(
     (state) => state.network.locations
   ) as LocationTable;
+
+  const connections: ConnectionTable = useAppSelector(
+    (state) => state.network.connections
+  ) as ConnectionTable;
 
   const iconLayer = new IconLayer<Location>({
     id: 'location-layer',
@@ -58,6 +70,23 @@ export default function Network() {
     getColor: (d) => [140, 140, 140],
   });
 
+  const arcLayer = new ArcLayer<ConnectionType>({
+    id: 'connection-layer',
+    data: Object.values(connections),
+    pickable: true,
+    getWidth: 12,
+    getSourcePosition: (d) => {
+      const location = locations[nodes[d.nodeIds[0]].getLocationId()];
+      return [location.longitude, location.latitude];
+    },
+    getTargetPosition: (d) => {
+      const location = locations[nodes[d.nodeIds[1]].getLocationId()];
+      return [location.longitude, location.latitude];
+    },
+    getSourceColor: (d) => [140, 140, 140],
+    getTargetColor: (d) => [140, 140, 140],
+  });
+
   return (
     <Flex>
       <Box m={4}>
@@ -72,7 +101,7 @@ export default function Network() {
         <DeckGL
           initialViewState={INITIAL_VIEW_STATE}
           controller
-          layers={[iconLayer]}
+          layers={[iconLayer, arcLayer]}
           ContextProvider={MapContext.Provider}
         >
           <StaticMap

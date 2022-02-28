@@ -1,4 +1,14 @@
-export default class ConnectionObj {
+import { NodeId } from './Host';
+
+export type ConnectionId = number;
+
+export interface Connection {
+  id: ConnectionId;
+  nodeIds: NodeId[];
+  propagationTime: number;
+}
+
+export default class ConnectionObj implements Connection {
   id: number;
   nodeIds: number[] = [];
   propagationTime: number;

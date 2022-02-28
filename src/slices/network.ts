@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { Host, Network } from '../services';
+import { Host, Network, Connection } from '../services';
 
 const network = createSlice({
   name: 'network',
@@ -8,6 +8,7 @@ const network = createSlice({
     validator: null,
     nodes: {},
     locations: {},
+    connections: {},
     timeCounter: 0,
   } as Network,
   reducers: {
@@ -19,12 +20,11 @@ const network = createSlice({
     },
     init: (state, action: PayloadAction<void>) => {
       // Create new nodes
-      const hostA = new Host(0, 'Host A', 0, 0, undefined, undefined);
-      const hostB = new Host(1, 'Host B', 1, 0, undefined, undefined);
+      const hostA = new Host(0, 'Host A', 0, 0, undefined);
+      const hostB = new Host(1, 'Host B', 1, 0, undefined);
 
-      // Connect new nodes together
-      hostA.addConnectedNodes([1]);
-      hostB.addConnectedNodes([0]);
+      // Create a new connection between the two
+      const con = new Connection(0, 1, 10);
 
       return {
         timeCounter: 1,
@@ -40,6 +40,9 @@ const network = createSlice({
             latitude: 47.673416976459634,
             longitude: -122.11814177692641,
           },
+        },
+        connections: {
+          0: con,
         },
         nodes: {
           0: hostA,
