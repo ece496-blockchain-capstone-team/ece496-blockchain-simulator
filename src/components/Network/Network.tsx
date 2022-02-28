@@ -35,7 +35,7 @@ const NAV_CONTROL_STYLE = {
 
 // Icon Layer
 const ICON_MAPPING = {
-  marker: { x: 0, y: 0, width: 128, height: 128, mask: true },
+  marker: { x: 0, y: 0, width: 128, height: 128, mask: true, anchorY: 128 },
 };
 
 export default function Network() {
@@ -64,9 +64,9 @@ export default function Network() {
     iconMapping: ICON_MAPPING,
     getIcon: (d) => 'marker',
 
-    sizeScale: 15,
+    sizeScale: 10,
     getPosition: (d) => [d.longitude, d.latitude],
-    getSize: (d) => 5,
+    getSize: (d) => 10,
     getColor: (d) => [140, 140, 140],
   });
 
