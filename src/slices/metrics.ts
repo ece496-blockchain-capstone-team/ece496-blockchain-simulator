@@ -5,7 +5,7 @@ const metrics = createSlice({
   initialState: {
     // Set initial state and values
     numNodes: 0,
-    numValidators: 0,
+    numLeaders: 0,
     numMaliciousNodes: 0,
     /*
     Number of blocks added to ledger per second
@@ -36,8 +36,8 @@ const metrics = createSlice({
     setNumNodes: (state, action: PayloadAction<number>) => {
       state.numNodes = action.payload;
     },
-    setNumValidators: (state, action: PayloadAction<number>) => {
-      state.numValidators = action.payload;
+    setNumLeaders: (state, action: PayloadAction<number>) => {
+      state.numLeaders = action.payload;
     },
     setNumMaliciousNodes: (state, action: PayloadAction<number>) => {
       state.numMaliciousNodes = action.payload;
