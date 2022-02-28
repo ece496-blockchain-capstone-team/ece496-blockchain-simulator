@@ -33,6 +33,10 @@ export default class Host {
    */
   private locationId: number;
   /**
+   * List of IDs of connections to host
+   */
+  public connectionIds: number[];
+  /**
    * The most recent time value when this node was the leader
    */
   private lastLeaderTime: number = 0;
