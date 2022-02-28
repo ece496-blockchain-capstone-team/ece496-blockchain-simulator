@@ -11,6 +11,7 @@ import Host from './components/Host';
 import Chain from './components/Chain';
 import Block from './components/Block';
 import SimulationSettings from './components/SimulationSettings';
+import Metrics from './components/Metrics';
 
 import './global.css';
 
@@ -26,6 +27,7 @@ export default function App() {
           <Route path="/chain" element={<Chain />} />
           <Route path="/block" element={<Block />} />
           <Route path="/simulation-settings" element={<SimulationSettings />} />
+          <Route path="/metrics" element={<Metrics />} />
         </Routes>
       </div>
     </ChakraProvider>
