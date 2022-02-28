@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import DeckGL from '@deck.gl/react';
 import { IconLayer, ArcLayer } from '@deck.gl/layers';
 
-import { Flex, Heading, Box } from '@chakra-ui/react';
+import { Flex, Heading, Box, Skeleton } from '@chakra-ui/react';
 import { StaticMap, MapContext, NavigationControl } from 'react-map-gl';
 
 import { useAppDispatch, useAppSelector } from '../../store';
@@ -39,6 +39,8 @@ const ICON_MAPPING = {
 };
 
 export default function Network() {
+  const [loadedMap, setLoadedMap] = useState(false);
+
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -107,6 +109,7 @@ export default function Network() {
           <StaticMap
             mapStyle={MAP_STYLE}
             mapboxApiAccessToken="pk.eyJ1IjoiZGF2aWR5ZWUiLCJhIjoiY2wwMzh3d202MGt6NjNpbWo4ZHRtbHlwZCJ9.L3KYonYcVS3OAIL_eueY3w"
+            onLoad={() => setLoadedMap(true)}
           />
           <NavigationControl style={NAV_CONTROL_STYLE} />
         </DeckGL>

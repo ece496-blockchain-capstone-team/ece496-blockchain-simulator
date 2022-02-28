@@ -15,6 +15,8 @@ export default function NavLinks() {
         <LinkItem to="/host">Host</LinkItem>
         <LinkItem to="/chain">Chain</LinkItem>
         <LinkItem to="/block">Block</LinkItem>
+        <LinkItem to="/metrics">Metrics</LinkItem>
+        <LinkItem to="/simulation-settings">Settings</LinkItem>
       </Stack>
     </Box>
   );

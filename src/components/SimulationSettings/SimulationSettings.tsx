@@ -12,6 +12,7 @@ import {
   NumberInputStepper,
   NumberIncrementStepper,
   NumberDecrementStepper,
+  Box,
 } from '@chakra-ui/react';
 import settings from '../../slices/settings';
 import { RootState } from '../../store';
@@ -38,7 +39,7 @@ export default function SimulationSettings() {
   }
 
   return (
-    <>
+    <Box p={4}>
       <Heading size="lg">Simulation Settings</Heading>
       <br />
       <Heading size="sm">Staking</Heading>
@@ -111,6 +112,6 @@ export default function SimulationSettings() {
           <Button size="sm">Cancel</Button>
         </Link>
       </Stack>
-    </>
+    </Box>
   );
 }

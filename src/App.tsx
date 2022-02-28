@@ -13,8 +13,6 @@ import Block from './components/Block';
 import SimulationSettings from './components/SimulationSettings';
 import Metrics from './components/Metrics';
 
-import './global.css';
-
 export default function App() {
   return (
     <ChakraProvider>
