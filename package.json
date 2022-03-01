@@ -33,7 +33,8 @@
     "react-scripts": "4.0.3",
     "typescript": "^4.1.2",
     "web-vitals": "^1.0.1",
-    "yup": "^0.32.11"
+    "yup": "^0.32.11",
+    "react-horizontal-scrolling-menu": "^2.7.1"
   },
   "scripts": {
     "prebuild": "yarn format && yarn lint",

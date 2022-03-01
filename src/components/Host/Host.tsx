@@ -21,6 +21,7 @@ import * as Yup from 'yup';
 import { useAppSelector } from '../../store';
 
 import { NodeTable } from '../../services';
+import Chain from '../Chain';
 
 export default function Host() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -28,6 +29,10 @@ export default function Host() {
 
   const nodes: NodeTable = useAppSelector((state) => state.network.nodes) as NodeTable;
   const selectedNode = nodeId ? nodes[parseInt(nodeId, 10)] : undefined;
+
+  // console.log(nodeId)
+  // console.log(nodes)
+  // console.log(selectedNode)
 
   return (
     <Box p={4}>
@@ -54,34 +59,88 @@ export default function Host() {
             </Stack>
           </Form>
         </Formik>
-
         {nodeId && selectedNode && (
-          <Box borderWidth="1px" borderRadius="lg" overflow="hidden" p={4}>
-            <Heading> Stats </Heading>
-            <Table>
-              <Tbody>
-                <Tr>
-                  <Th> ID: </Th>
-                  <Td> {selectedNode.getId()} </Td>
-                  <Th> Name: </Th>
-                  <Td> {selectedNode.getName()} </Td>
-                </Tr>
-                <Tr>
-                  <Th> Role: </Th>
-                  <Td> {selectedNode.getRole()} </Td>
-                  <Th> Total stake: </Th>
-                  <Td> {selectedNode.getStake()} </Td>
-                </Tr>
-                <Tr>
-                  <Th> Last action time: </Th>
-                  <Td> {selectedNode.getLastActionTime()} </Td>
-                  <Th> Last leader time: </Th>
-                  <Td> {selectedNode.getLastLeaderTime()} </Td>
-                </Tr>
-              </Tbody>
-            </Table>
+          <Box w="100%" borderWidth="1px" borderRadius="lg" overflow="hidden" p={4}>
+            <Heading pb={4}> Chain </Heading>
+            <Chain selectedNode={selectedNode} />
           </Box>
         )}
+        <Stack direction="row" spacing={4}>
+          {nodeId && selectedNode && (
+            <Box w="75%" borderWidth="1px" borderRadius="lg" overflow="hidden" p={4}>
+              <Heading> Stats </Heading>
+              <Table>
+                <Tbody>
+                  <Tr>
+                    <Th> ID: </Th>
+                    <Td> {selectedNode.getId()} </Td>
+                    <Th> Name: </Th>
+                    <Td> {selectedNode.getName()} </Td>
+                  </Tr>
+                  <Tr>
+                    <Th> Role: </Th>
+                    <Td> {selectedNode.getRole()} </Td>
+                    <Th> Total stake: </Th>
+                    <Td> {selectedNode.getStake()} </Td>
+                  </Tr>
+                  <Tr>
+                    <Th> Consensus Stage: </Th>
+                    <Td> {selectedNode.getLastActionTime()} </Td>
+                    <Th> Chain Length: </Th>
+                    <Td> {selectedNode.getLastLeaderTime()} </Td>
+                  </Tr>
+                  <Tr>
+                    <Th> Last action time: </Th>
+                    <Td> {selectedNode.getLastActionTime()} </Td>
+                    <Th> Last leader time: </Th>
+                    <Td> {selectedNode.getLastLeaderTime()} </Td>
+                  </Tr>
+                </Tbody>
+              </Table>
+            </Box>
+          )}
+
+          {nodeId && selectedNode && (
+            <Box
+              alignItems="center"
+              w="25%"
+              borderWidth="1px"
+              borderRadius="lg"
+              overflow="hidden"
+              p={4}
+            >
+              <Heading pb={3}> Actions </Heading>
+              <Table variant="unstyled">
+                <Tbody>
+                  <Tr>
+                    <Td textAlign="center">
+                      {' '}
+                      <Button w="60%" colorScheme="teal" size="lg">
+                        Make Transactions
+                      </Button>{' '}
+                    </Td>
+                  </Tr>
+                  <Tr>
+                    <Td textAlign="center">
+                      {' '}
+                      <Button w="60%" colorScheme="teal" size="lg">
+                        Change Type
+                      </Button>{' '}
+                    </Td>
+                  </Tr>
+                  <Tr>
+                    <Td textAlign="center">
+                      {' '}
+                      <Button w="60%" colorScheme="teal" size="lg">
+                        Change Location
+                      </Button>{' '}
+                    </Td>
+                  </Tr>
+                </Tbody>
+              </Table>
+            </Box>
+          )}
+        </Stack>
       </Stack>
     </Box>
   );

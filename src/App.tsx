@@ -22,7 +22,7 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/network" element={<Network />} />
           <Route path="/host" element={<Host />} />
-          <Route path="/chain" element={<Chain />} />
+          {/* <Route path="/chain" element={<Chain />} /> */}
           <Route path="/block" element={<Block />} />
           <Route path="/simulation-settings" element={<SimulationSettings />} />
           <Route path="/metrics" element={<Metrics />} />
