@@ -1,5 +1,9 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
+import { BrowserRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
+
+import { store } from '../../store';
 import BlockObj from '../../services/Block';
 import ChainObj from '../../services/Chain';
 import HostView from './Host';
@@ -35,7 +39,13 @@ function setupHostsList(numberOfHosts: number): Host[] {
 }
 
 test('renders test paragraph for host view', () => {
-  render(<HostView />);
+  render(
+    <BrowserRouter>
+      <Provider store={store}>
+        <HostView />
+      </Provider>
+    </BrowserRouter>
+  );
   const element = screen.getByText(/host view/i);
   expect(element).toBeInTheDocument();
 });

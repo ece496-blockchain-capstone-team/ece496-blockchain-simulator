@@ -3,11 +3,12 @@ import React, { useEffect, useState } from 'react';
 import DeckGL from '@deck.gl/react';
 import { IconLayer, ArcLayer } from '@deck.gl/layers';
 
-import { Flex, Heading, Box, Skeleton } from '@chakra-ui/react';
+import { Flex, Heading, Box } from '@chakra-ui/react';
 import { StaticMap, MapContext, NavigationControl } from 'react-map-gl';
 
 import { useAppDispatch, useAppSelector } from '../../store';
 import { network } from '../../slices';
+
 import {
   LocationTable,
   Location,
