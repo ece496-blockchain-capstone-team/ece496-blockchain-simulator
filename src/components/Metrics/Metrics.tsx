@@ -29,7 +29,7 @@ export default function Metrics() {
     (state: RootState) => state.settings
   );
   // Import metric states
-  const { numNodes, numLeaders, numMaliciousNodes, throughput, finality, nakomotoCoeff } =
+  const { numNodes, numMaliciousNodes, throughput, finality, nakomotoCoeff } =
     useSelector((state: RootState) => state.metrics);
   const dispatch = useDispatch();
   const [fileName, setFileName] = React.useState('');
@@ -65,7 +65,6 @@ export default function Metrics() {
     ],
     ['Block Size', 'Size of each block in KiB.', 'blockSize', `${blockSize}`],
     ['Number of Nodes', 'Number of nodes in network.', 'numNodes', `${numNodes}`],
-    ['Number of Leaders', 'Number of leaders in network.', 'numLeaders', `${numLeaders}`],
     [
       'Number of Malicious Nodes',
       'Number of malicious nodes in network.',
@@ -174,12 +173,6 @@ export default function Metrics() {
               <Td>Number of nodes in network.</Td>
               <Td>numNodes</Td>
               <Td>{numNodes}</Td>
-            </Tr>
-            <Tr>
-              <Td>Number of Leaders</Td>
-              <Td>Number of leaders in network.</Td>
-              <Td>numLeaders</Td>
-              <Td>{numLeaders}</Td>
             </Tr>
             <Tr>
               <Td>Number of Malicious Nodes</Td>
