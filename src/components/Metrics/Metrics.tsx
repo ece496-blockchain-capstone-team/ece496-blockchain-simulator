@@ -11,6 +11,11 @@ import {
   FormHelperText,
   Input,
   Box,
+  Tabs,
+  TabList,
+  TabPanels,
+  Tab,
+  TabPanel,
   Table,
   Thead,
   Tbody,
@@ -106,6 +111,110 @@ export default function Metrics() {
     element.click();
   }
 
+  function loadTableView() {
+    return (
+      <Table size="lg" variant="simple" width="fill">
+        <Tbody>
+          <Tr>
+            <Th>Parameter Name</Th>
+            <Th>Description</Th>
+            <Th>Parameter Variable</Th>
+            <Th>Value</Th>
+          </Tr>
+          <Tr>
+            <Td>Staking</Td>
+            <Td>
+              Type of stake setup.
+              <br />1 = Same stake for every host.
+              <br />2 = Random stake.
+            </Td>
+            <Td>stake</Td>
+            <Td>{stake}</Td>
+          </Tr>
+          <Tr>
+            <Td>Voting Power</Td>
+            <Td>
+              Division of voting power.
+              <br />1 = Host&apos;s stake divided by total stake.
+              <br />2 = Equal voting power for all hosts.
+            </Td>
+            <Td>votingPower</Td>
+            <Td>{votingPower}</Td>
+          </Tr>
+          <Tr>
+            <Td>Leader Election Method</Td>
+            <Td>
+              Leader election method.
+              <br />1 = Round robin, ordered by voting power.
+              <br />2 = Round robin, random order.
+              <br />3 = Completely random each time.
+            </Td>
+            <Td>electionAlgo</Td>
+            <Td>{electionAlgo}</Td>
+          </Tr>
+          <Tr>
+            <Td>Anti-Malicious Algorithm</Td>
+            <Td>
+              Type of anti-malicious algorithm implemented.
+              <br />1 = None.
+              <br />2 = Byzantine Fault Tolerance.
+            </Td>
+            <Td>antiMaliciousAlgo</Td>
+            <Td>{antiMaliciousAlgo}</Td>
+          </Tr>
+          <Tr>
+            <Td>Block Size</Td>
+            <Td>Size of each block in KiB.</Td>
+            <Td>blockSize</Td>
+            <Td>{blockSize}</Td>
+          </Tr>
+          <Tr>
+            <Td>Number of Nodes</Td>
+            <Td>Number of nodes in network.</Td>
+            <Td>numNodes</Td>
+            <Td>{numNodes}</Td>
+          </Tr>
+          <Tr>
+            <Td>Number of Malicious Nodes</Td>
+            <Td>Number of malicious nodes in network.</Td>
+            <Td>numMaliciousNodes</Td>
+            <Td>{numMaliciousNodes}</Td>
+          </Tr>
+          <Tr>
+            <Td>Throughput</Td>
+            <Td>
+              Number of blocks added to ledger per second where a block is considered
+              added if a block reaches a quorum.
+            </Td>
+            <Td>throughput</Td>
+            <Td>{throughput}</Td>
+          </Tr>
+          <Tr>
+            <Td>Finality</Td>
+            <Td>
+              Time from client to send a transaction to finally be appended on the ledger
+              in seconds.
+            </Td>
+            <Td>finality</Td>
+            <Td>{finality}</Td>
+          </Tr>
+          <Tr>
+            <Td>Nakomoto Coefficient</Td>
+            <Td>
+              Nakamoto coefficient is the number of validators that would need to work
+              together to slow down or block the blockchain from functioning properly. The
+              Nakamoto coefficient depends on the network configuration.
+            </Td>
+            <Td>nakomotoCoeff</Td>
+            <Td>{nakomotoCoeff}</Td>
+          </Tr>
+        </Tbody>
+      </Table>
+    );
+  }
+
+  const [showGraphs, setShowGraphs] = React.useState(false);
+
   return (
     <div className="MetricsView">
       <Box p={4}>
@@ -113,103 +222,24 @@ export default function Metrics() {
         <br />
         <p>View and download metrics related to the current configuration.</p>
         <br />
-        <Table size="lg" variant="simple" width="fill">
-          <Tbody>
-            <Tr>
-              <Th>Parameter Name</Th>
-              <Th>Description</Th>
-              <Th>Parameter Variable</Th>
-              <Th>Value</Th>
-            </Tr>
-            <Tr>
-              <Td>Staking</Td>
-              <Td>
-                Type of stake setup.
-                <br />1 = Same stake for every host.
-                <br />2 = Random stake.
-              </Td>
-              <Td>stake</Td>
-              <Td>{stake}</Td>
-            </Tr>
-            <Tr>
-              <Td>Voting Power</Td>
-              <Td>
-                Division of voting power.
-                <br />1 = Host&apos;s stake divided by total stake.
-                <br />2 = Equal voting power for all hosts.
-              </Td>
-              <Td>votingPower</Td>
-              <Td>{votingPower}</Td>
-            </Tr>
-            <Tr>
-              <Td>Leader Election Method</Td>
-              <Td>
-                Leader election method.
-                <br />1 = Round robin, ordered by voting power.
-                <br />2 = Round robin, random order.
-                <br />3 = Completely random each time.
-              </Td>
-              <Td>electionAlgo</Td>
-              <Td>{electionAlgo}</Td>
-            </Tr>
-            <Tr>
-              <Td>Anti-Malicious Algorithm</Td>
-              <Td>
-                Type of anti-malicious algorithm implemented.
-                <br />1 = None.
-                <br />2 = Byzantine Fault Tolerance.
-              </Td>
-              <Td>antiMaliciousAlgo</Td>
-              <Td>{antiMaliciousAlgo}</Td>
-            </Tr>
-            <Tr>
-              <Td>Block Size</Td>
-              <Td>Size of each block in KiB.</Td>
-              <Td>blockSize</Td>
-              <Td>{blockSize}</Td>
-            </Tr>
-            <Tr>
-              <Td>Number of Nodes</Td>
-              <Td>Number of nodes in network.</Td>
-              <Td>numNodes</Td>
-              <Td>{numNodes}</Td>
-            </Tr>
-            <Tr>
-              <Td>Number of Malicious Nodes</Td>
-              <Td>Number of malicious nodes in network.</Td>
-              <Td>numMaliciousNodes</Td>
-              <Td>{numMaliciousNodes}</Td>
-            </Tr>
-            <Tr>
-              <Td>Throughput</Td>
-              <Td>
-                Number of blocks added to ledger per second where a block is considered
-                added if a block reaches a quorum.
-              </Td>
-              <Td>throughput</Td>
-              <Td>{throughput}</Td>
-            </Tr>
-            <Tr>
-              <Td>Finality</Td>
-              <Td>
-                Time from client to send a transaction to finally be appended on the
-                ledger in seconds.
-              </Td>
-              <Td>finality</Td>
-              <Td>{finality}</Td>
-            </Tr>
-            <Tr>
-              <Td>Nakomoto Coefficient</Td>
-              <Td>
-                Nakamoto coefficient is the number of validators that would need to work
-                together to slow down or block the blockchain from functioning properly.
-                The Nakamoto coefficient depends on the network configuration.
-              </Td>
-              <Td>nakomotoCoeff</Td>
-              <Td>{nakomotoCoeff}</Td>
-            </Tr>
-          </Tbody>
-        </Table>
+        <Stack direction="row" spacing="20px">
+          <Button
+            size="sm"
+            colorScheme={showGraphs ? 'blue' : 'gray'}
+            onClick={() => setShowGraphs(false)}
+          >
+            Table
+          </Button>
+          <Button
+            size="sm"
+            colorScheme={showGraphs ? 'gray' : 'blue'}
+            onClick={() => setShowGraphs(true)}
+          >
+            Graphs
+          </Button>
+        </Stack>
+        <br />
+        {showGraphs ? <p>hi</p> : loadTableView()}
         <br />
         <p>To save these metrics to CSV, please input the CSV name:</p>
         <br />
@@ -225,13 +255,13 @@ export default function Metrics() {
         </FormControl>
         <br />
         <Stack direction="row" spacing="20px">
+          <Button size="sm" colorScheme="blue" onClick={() => saveMetricsAsCSV()}>
+            Save as CSV
+          </Button>
           <Link to="/">
-            <Button size="sm" colorScheme="blue" onClick={() => saveMetricsAsCSV()}>
-              Save as CSV
+            <Button size="sm" colorScheme="gray">
+              Cancel
             </Button>
-          </Link>
-          <Link to="/">
-            <Button size="sm">Cancel</Button>
           </Link>
         </Stack>
         <br />
