@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import {
@@ -17,6 +17,7 @@ import {
   Tab,
   TabPanel,
   Table,
+  Text,
   Thead,
   Tbody,
   Tfoot,
@@ -25,6 +26,17 @@ import {
   Td,
   TableCaption,
 } from '@chakra-ui/react';
+import {
+  ScatterChart,
+  Scatter,
+  XAxis,
+  YAxis,
+  ZAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from 'recharts';
 import { RootState } from '../../store';
 
 // export default class Metrics extends React.Component {
@@ -213,17 +225,62 @@ export default function Metrics() {
     );
   }
 
+  /**
+   * TODO: delete this when we have actual data for finality
+   * Reference: https://recharts.org/en-US/examples/JointLineScatterChart
+   */
+  const data01 = [
+    { x: 10, y: 30 },
+    { x: 30, y: 200 },
+    { x: 45, y: 100 },
+    { x: 50, y: 400 },
+    { x: 70, y: 150 },
+    { x: 100, y: 250 },
+  ];
+  const data02 = [
+    { x: 30, y: 20 },
+    { x: 50, y: 180 },
+    { x: 75, y: 240 },
+    { x: 100, y: 100 },
+    { x: 120, y: 190 },
+  ];
+
   function loadGraphView() {
-    return <p>TODO!!!</p>;
+    return (
+      <>
+        <Heading size="med">Metrics Dashboard</Heading>
+        <br />
+        <ScatterChart
+          width={500}
+          height={400}
+          margin={{
+            top: 20,
+            right: 20,
+            bottom: 20,
+            left: 20,
+          }}
+        >
+          <CartesianGrid />
+          <XAxis type="number" dataKey="x" name="stature" unit="Number of Transactions" />
+          <YAxis type="number" dataKey="y" name="weight" unit="Time" />
+          <ZAxis type="number" range={[100]} />
+          <Tooltip cursor={{ strokeDasharray: '3 3' }} />
+          <Legend />
+          <Scatter name="File 1 Name" data={data01} fill="#8884d8" line />
+          <Scatter name="File 2 Name" data={data02} fill="#82ca9d" line />
+        </ScatterChart>
+      </>
+    );
   }
+
   return (
     <div className="MetricsView">
       <Box p={4}>
         <Heading size="lg">Metrics Dashboard</Heading>
         <br />
-        <p>View and download metrics related to the current configuration.</p>
+        <Text>View and download metrics related to the current configuration.</Text>
         <br />
-        <Tabs>
+        <Tabs colorScheme="teal">
           <TabList>
             <Tab>Table</Tab>
             <Tab>Graph</Tab>
@@ -246,7 +303,7 @@ export default function Metrics() {
         </FormControl>
         <br />
         <Stack direction="row" spacing="20px">
-          <Button size="sm" colorScheme="blue" onClick={() => saveMetricsAsCSV()}>
+          <Button size="sm" colorScheme="teal" onClick={() => saveMetricsAsCSV()}>
             Save as CSV
           </Button>
           <Link to="/">
