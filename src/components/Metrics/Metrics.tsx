@@ -213,8 +213,9 @@ export default function Metrics() {
     );
   }
 
-  const [showGraphs, setShowGraphs] = React.useState(false);
-
+  function loadGraphView() {
+    return <p>TODO!!!</p>;
+  }
   return (
     <div className="MetricsView">
       <Box p={4}>
@@ -222,27 +223,17 @@ export default function Metrics() {
         <br />
         <p>View and download metrics related to the current configuration.</p>
         <br />
-        <Stack direction="row" spacing="20px">
-          <Button
-            size="sm"
-            colorScheme={showGraphs ? 'blue' : 'gray'}
-            onClick={() => setShowGraphs(false)}
-          >
-            Table
-          </Button>
-          <Button
-            size="sm"
-            colorScheme={showGraphs ? 'gray' : 'blue'}
-            onClick={() => setShowGraphs(true)}
-          >
-            Graphs
-          </Button>
-        </Stack>
-        <br />
-        {showGraphs ? <p>hi</p> : loadTableView()}
-        <br />
-        <p>To save these metrics to CSV, please input the CSV name:</p>
-        <br />
+        <Tabs>
+          <TabList>
+            <Tab>Table</Tab>
+            <Tab>Graph</Tab>
+          </TabList>
+
+          <TabPanels>
+            <TabPanel>{loadTableView()}</TabPanel>
+            <TabPanel>{loadGraphView()}</TabPanel>
+          </TabPanels>
+        </Tabs>
         <FormControl>
           <FormLabel htmlFor="csv-name">CSV Name</FormLabel>
           <Input
