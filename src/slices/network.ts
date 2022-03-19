@@ -94,6 +94,42 @@ const network = createSlice({
       // Remove connection from state table
       delete state.connections[connectionId];
     },
+    addLocation: (
+      state,
+      action: PayloadAction<{ latitude: number; logitude: number }>
+    ) => {
+      let maxId = 0;
+      Object.keys(state.locations).forEach((id) => {
+        maxId = Math.max(maxId, +id);
+      });
+      state.locations[maxId + 1] = {
+        id: maxId + 1,
+        latitude: action.payload.latitude,
+        longitude: action.payload.logitude,
+      };
+    },
+    removeLocation: (state, action: PayloadAction<{ id: number }>) => {
+      delete state.locations[action.payload.id];
+    },
+    addHost: (
+      state,
+      action: PayloadAction<{ name: string; location: number; stake: number; role?: any }>
+    ) => {
+      let maxId = 0;
+      Object.keys(state.nodes).forEach((id) => {
+        maxId = Math.max(maxId, +id);
+      });
+      state.nodes[maxId + 1] = new Host(
+        maxId + 1,
+        action.payload.name,
+        action.payload.location,
+        action.payload.stake,
+        action.payload.role
+      );
+    },
+    removeHost: (state, action: PayloadAction<{ id: number }>) => {
+      delete state.nodes[action.payload.id];
+    },
   },
 });
 

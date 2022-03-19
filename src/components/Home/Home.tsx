@@ -22,10 +22,10 @@ export default function Home() {
             <Button size="lg" onClick={() => toggleItemDisplay('introduction')}>
               Introduction
             </Button>
-            <Button size="lg">Create Network</Button>
             <Button size="lg" onClick={() => navigate('/simulation-settings')}>
               Simulation Settings
             </Button>
+            <Button size="lg">Create Network</Button>
             <Button size="lg">Start Simulation</Button>
             <Button size="lg" onClick={() => navigate('/metrics')}>
               Metrics Dashboard

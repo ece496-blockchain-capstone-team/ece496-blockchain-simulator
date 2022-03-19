@@ -11,6 +11,7 @@ import Host from './components/Host';
 import Chain from './components/Chain';
 import Block from './components/Block';
 import SimulationSettings from './components/SimulationSettings';
+import NetworkSetup from './components/NetworkSetup';
 import Metrics from './components/Metrics';
 
 export default function App() {
@@ -25,6 +26,7 @@ export default function App() {
           {/* <Route path="/chain" element={<Chain />} /> */}
           <Route path="/block" element={<Block />} />
           <Route path="/simulation-settings" element={<SimulationSettings />} />
+          <Route path="/network-setup" element={<NetworkSetup />} />
           <Route path="/metrics" element={<Metrics />} />
         </Routes>
       </div>
