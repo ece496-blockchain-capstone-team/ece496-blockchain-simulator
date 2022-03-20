@@ -19,18 +19,18 @@ import { RootState } from '../../store';
 
 export default function NetworkSetup() {
   const dispatch = useDispatch();
+  dispatch(network.actions.init());
 
   return (
     <Box p={4}>
-      <Button
-        size="sm"
-        colorScheme="blue"
-        onClick={() =>
-          dispatch(network.actions.addHost({ name: 'Bro', location: 0, stake: 100 }))
-        }
-      >
-        New Host
-      </Button>
+      <Heading size="sm">Toronto</Heading>
+      <NumberInput size="md" maxW={24} defaultValue={1} onChange={(e) => {}}>
+        <NumberInputField />
+        <NumberInputStepper>
+          <NumberIncrementStepper />
+          <NumberDecrementStepper />
+        </NumberInputStepper>
+      </NumberInput>
     </Box>
   );
 }

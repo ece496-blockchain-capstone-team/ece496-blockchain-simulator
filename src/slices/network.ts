@@ -33,12 +33,12 @@ const network = createSlice({
     },
     init: (state, action: PayloadAction<void>) => {
       // Create new nodes
-      const hostA = new Host(0, 'Host A', 0, 0, undefined);
-      const hostB = new Host(1, 'Host B', 1, 0, undefined);
-
-      // Create a new connection between the two
-      const con = new Connection(0, 1, 10);
-      con.id = 0;
+      const toronto = new Host(0, 'Toronto', 0, 10, undefined);
+      const buenosaires = new Host(1, 'BuenosAires', 1, 10, undefined);
+      const amsterdam = new Host(2, 'Amsterdam', 2, 10, undefined);
+      const brisbane = new Host(3, 'Brisbane', 3, 10, undefined);
+      const capetown = new Host(4, 'Capetown', 4, 10, undefined);
+      const tokyo = new Host(5, 'Tokyo', 5, 10, undefined);
 
       return {
         timeCounter: 1,
@@ -46,21 +46,43 @@ const network = createSlice({
         locations: {
           0: {
             id: 0,
-            latitude: 37.54560327062006,
-            longitude: -77.44554131810912,
+            latitude: 43.6481,
+            longitude: -79.4042,
           },
           1: {
             id: 1,
-            latitude: 47.673416976459634,
-            longitude: -122.11814177692641,
+            latitude: -34.6036,
+            longitude: -58.3817,
+          },
+          2: {
+            id: 2,
+            latitude: 52.3,
+            longitude: 4.7,
+          },
+          3: {
+            id: 3,
+            latitude: -27.4667,
+            longitude: 153.0333,
+          },
+          4: {
+            id: 4,
+            latitude: -33.9767,
+            longitude: 18.4244,
+          },
+          5: {
+            id: 5,
+            latitude: 35.6833,
+            longitude: 139.7667,
           },
         },
-        connections: {
-          0: con,
-        },
+        connections: {},
         nodes: {
-          0: hostA,
-          1: hostB,
+          0: toronto,
+          1: buenosaires,
+          2: amsterdam,
+          3: brisbane,
+          4: capetown,
+          5: tokyo,
         },
       };
     },
@@ -96,32 +118,49 @@ const network = createSlice({
     },
     addLocation: (
       state,
-      action: PayloadAction<{ latitude: number; logitude: number }>
+      action: PayloadAction<{ id?: number; latitude: number; logitude: number }>
     ) => {
-      let maxId = 0;
-      Object.keys(state.locations).forEach((id) => {
-        maxId = Math.max(maxId, +id);
-      });
-      state.locations[maxId + 1] = {
-        id: maxId + 1,
-        latitude: action.payload.latitude,
-        longitude: action.payload.logitude,
-      };
+      if (action.payload.id != null) {
+        state.locations[action.payload.id] = {
+          id: action.payload.id,
+          latitude: action.payload.latitude,
+          longitude: action.payload.logitude,
+        };
+      } else {
+        let maxId = 0;
+        Object.keys(state.locations).forEach((id) => {
+          maxId = Math.max(maxId, +id);
+        });
+        state.locations[maxId + 1] = {
+          id: maxId + 1,
+          latitude: action.payload.latitude,
+          longitude: action.payload.logitude,
+        };
+      }
     },
     removeLocation: (state, action: PayloadAction<{ id: number }>) => {
       delete state.locations[action.payload.id];
     },
     addHost: (
       state,
-      action: PayloadAction<{ name: string; location: number; stake: number; role?: any }>
+      action: PayloadAction<{
+        name?: string;
+        location: number;
+        stake: number;
+        role?: any;
+      }>
     ) => {
       let maxId = 0;
       Object.keys(state.nodes).forEach((id) => {
         maxId = Math.max(maxId, +id);
       });
+      let name = state.locations[action.payload.location].id + '-' + maxId;
+      if (action.payload.name) {
+        name = action.payload.name;
+      }
       state.nodes[maxId + 1] = new Host(
         maxId + 1,
-        action.payload.name,
+        name,
         action.payload.location,
         action.payload.stake,
         action.payload.role

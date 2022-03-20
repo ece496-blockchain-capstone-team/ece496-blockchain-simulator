@@ -19,11 +19,11 @@ import {
 
 // Viewport settings
 const INITIAL_VIEW_STATE = {
-  latitude: 51.47,
-  longitude: 0.45,
-  zoom: 4,
+  latitude: 20,
+  longitude: 0,
+  zoom: 2,
   bearing: 0,
-  pitch: 30,
+  pitch: 0,
 };
 
 const MAP_STYLE =
@@ -41,12 +41,6 @@ const ICON_MAPPING = {
 
 export default function Network() {
   const [loadedMap, setLoadedMap] = useState(false);
-
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    dispatch(network.actions.init());
-  }, []);
 
   const nodes: NodeTable = useAppSelector((state) => state.network.nodes) as NodeTable;
 
