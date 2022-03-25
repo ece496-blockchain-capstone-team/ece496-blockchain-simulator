@@ -1,4 +1,5 @@
 import Host, { NodeId } from './Host';
+import Actions from './Actions';
 import Location, { LocationId } from './Location';
 import { Connection, ConnectionId } from './Connections';
 
@@ -12,4 +13,10 @@ export default interface Network {
   locations: LocationTable;
   connections: ConnectionTable;
   timeCounter: number;
+  viewNumber: number;
+  leader: NodeId;
+  actionQueue: Actions;
+  logs: any;
+  latency: number;
+  throughput: number;
 }

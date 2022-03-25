@@ -1,6 +1,7 @@
 import React from 'react';
-import { Button, Grid, Heading, Box } from '@chakra-ui/react';
+import { Button, Grid, Heading, Box, Center } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
+import SimulationSettings from '../SimulationSettings';
 
 export default function Home() {
   const navigate = useNavigate();
@@ -14,19 +15,28 @@ export default function Home() {
     }
   }
 
+  function childToParentSimSettings() {
+    toggleItemDisplay('simulation-settings');
+  }
+
   return (
     <div className="HomePage">
-      <Box p={4}>
+      <Center p={4} h={window.innerHeight - 100}>
         <div id="options">
-          <Grid templateColumns="repeat(2, 2fr)" gap={6} width={500}>
+          <Grid templateColumns="repeat(1, 1fr)" gap={20} width={500}>
+            <Button colorScheme="blue" size="lg" onClick={() => navigate('/network')}>
+              Create Network
+            </Button>
             <Button size="lg" onClick={() => toggleItemDisplay('introduction')}>
-              Introduction
+              Background Info
             </Button>
-            <Button size="lg">Create Network</Button>
-            <Button size="lg" onClick={() => navigate('/simulation-settings')}>
+            {/* <Button size="lg" onClick={() => navigate('/simulation-settings')}>
               Simulation Settings
-            </Button>
-            <Button size="lg">Start Simulation</Button>
+            </Button> */}
+            {/* <Button size="lg" onClick={() => toggleItemDisplay('simulation-settings')}>
+              Simulation Settings
+            </Button> */}
+            {/* <Button size="lg">Start Simulation</Button> */}
             <Button size="lg" onClick={() => navigate('/metrics')}>
               Metrics Dashboard
             </Button>
@@ -40,7 +50,10 @@ export default function Home() {
             Back
           </Button>
         </div>
-      </Box>
+        {/* <div id="simulation-settings" hidden>
+          <SimulationSettings childToParent={childToParentSimSettings} />
+        </div> */}
+      </Center>
     </div>
   );
 }
