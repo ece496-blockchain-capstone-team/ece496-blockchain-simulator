@@ -80,7 +80,7 @@ export default function SideBar(props: any) {
         {props.children}
       </Box>
       <Stack direction="row" m={6} spacing={4}>
-        <Box p={0}>Throughput:</Box>
+        <Box p={0}>Throughput (Blocks/sec):</Box>
       </Stack>
       <Stack direction="row" m={6} spacing={4}>
         <Box w={200} borderWidth={5} borderColor="teal" p={5}>
