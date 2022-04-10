@@ -92,7 +92,7 @@ function sim(state: any, time: any) {
     // state.timeCounter += stepAmount;
     state.timeCounter += 1;
     // state.finality = state.viewNumber / state.timeCounter;
-    state.throughput = state.viewNumber / (state.timeCounter / 100);
+    state.throughput = (state.viewNumber / (state.timeCounter / 100)).toFixed(10);
   }
 }
 
