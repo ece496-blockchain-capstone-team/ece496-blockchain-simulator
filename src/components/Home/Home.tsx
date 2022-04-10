@@ -17,6 +17,15 @@ export default function Home() {
 
   function childToParentSimSettings() {
     toggleItemDisplay('simulation-settings');
+    // navigate('/network')
+  }
+  function confirmSettings() {
+    toggleItemDisplay('simulation-settings');
+    // navigate('/network')
+  }
+  function cancelSettings() {
+    toggleItemDisplay('simulation-settings');
+    // navigate('/network')
   }
 
   return (
@@ -33,9 +42,9 @@ export default function Home() {
             {/* <Button size="lg" onClick={() => navigate('/simulation-settings')}>
               Simulation Settings
             </Button> */}
-            {/* <Button size="lg" onClick={() => toggleItemDisplay('simulation-settings')}>
+            <Button size="lg" onClick={() => toggleItemDisplay('simulation-settings')}>
               Simulation Settings
-            </Button> */}
+            </Button>
             {/* <Button size="lg">Start Simulation</Button> */}
             <Button size="lg" onClick={() => navigate('/metrics')}>
               Metrics Dashboard
@@ -50,9 +59,12 @@ export default function Home() {
             Back
           </Button>
         </div>
-        {/* <div id="simulation-settings" hidden>
-          <SimulationSettings childToParent={childToParentSimSettings} />
-        </div> */}
+        <div id="simulation-settings" hidden>
+          <SimulationSettings
+            confirmSettings={confirmSettings}
+            cancelSettings={cancelSettings}
+          />
+        </div>
       </Center>
     </div>
   );

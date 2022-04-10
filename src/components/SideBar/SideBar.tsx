@@ -15,6 +15,11 @@ import {
   Text,
   useDisclosure,
   BoxProps,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  NumberIncrementStepper,
+  NumberDecrementStepper,
   FlexProps,
 } from '@chakra-ui/react';
 import {
@@ -67,6 +72,7 @@ function SidebarContent({ onClose, ...rest }: SidebarProps) {
 
 export default function SideBar(props: any) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [userInput, setValue] = React.useState<any>();
   return (
     <Box minH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>
       {/* <SidebarContent onClose={() => onClose} display={{ base: 'none', md: 'block' }} /> */}
@@ -74,13 +80,37 @@ export default function SideBar(props: any) {
         {props.children}
       </Box>
       <Stack direction="row" m={6} spacing={4}>
-        <Box p={5}>props.latency</Box>
+        <Box p={0}>Throughput:</Box>
       </Stack>
       <Stack direction="row" m={6} spacing={4}>
-        <Button onClick={() => props.stepTime()}> STEP TIME</Button>
+        <Box w={200} borderWidth={5} borderColor="teal" p={5}>
+          {props.throughput}
+        </Box>
       </Stack>
       <Stack direction="row" m={6} spacing={4}>
-        <Button onClick={() => props.stepView()}> STEP VIEW</Button>
+        <Box h="65vh"> </Box>
+        {/* <Box mt={800}> </Box> */}
+      </Stack>
+      <Stack direction="row" m={6} spacing={4}>
+        <NumberInput
+          size="sm"
+          defaultValue={0}
+          min={0}
+          max={1000}
+          onChange={(s, e) => setValue(e)}
+        >
+          <NumberInputField />
+          <NumberInputStepper>
+            <NumberIncrementStepper />
+            <NumberDecrementStepper />
+          </NumberInputStepper>
+        </NumberInput>
+      </Stack>
+      <Stack direction="row" m={6} spacing={4}>
+        <Button onClick={() => props.stepView(userInput)}> Simulate Blocks </Button>
+      </Stack>
+      <Stack direction="row" m={6} spacing={4}>
+        <Button onClick={() => props.stepTime(userInput)}> Simulate seconds </Button>
       </Stack>
     </Box>
   );

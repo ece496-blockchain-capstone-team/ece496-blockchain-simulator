@@ -35,7 +35,7 @@ const MAP_STYLE =
   'https://basemaps.cartocdn.com/gl/positron-nolabels-gl-style/style.json';
 const NAV_CONTROL_STYLE = {
   position: 'absolute',
-  top: 10,
+  top: 110,
   left: 10,
 };
 
@@ -57,6 +57,12 @@ export default function Network() {
   useEffect(() => {
     dispatch(network.actions.init());
   }, []);
+
+  const throughput: number = useAppSelector(
+    (state) => state.network.throughput
+  ) as number;
+  const time: number = useAppSelector((state) => state.network.timeCounter) as number;
+  // const throughput: number = useAppSelector((state) => state.network.throughput) as number;
 
   const nodes: NodeTable = useAppSelector((state) => state.network.nodes) as NodeTable;
 
@@ -100,13 +106,14 @@ export default function Network() {
     getTargetColor: (d) => [140, 140, 140],
   });
 
-  const stepTime = () => {
+  const stepTime = (userInput: number) => {
     console.log(nodes);
-    dispatch(timestep(50));
+    dispatch(timestep(userInput));
   };
 
-  const stepView = () => {
-    dispatch(timestep(50));
+  const stepView = (userInput: number) => {
+    dispatch(simulate(userInput));
+    // dispatch(simulate(50));
   };
 
   function toggleItemDisplay(itemName: string) {
@@ -119,14 +126,14 @@ export default function Network() {
 
   function confirmSettings() {
     console.log('confirm settings');
-    // toggleItemDisplay('settings')
-    // toggleItemDisplay('nodeSetup')
+    toggleItemDisplay('settings');
+    toggleItemDisplay('nodeSetup');
     console.log('confirm settings done');
   }
 
   function cancelSettings() {
     console.log('cancel settings');
-    // navigate('/')
+    navigate('/');
   }
 
   function confirm(nodeNum: any) {
@@ -141,31 +148,32 @@ export default function Network() {
     console.log('cancel content');
     toggleItemDisplay('settings');
     toggleItemDisplay('nodeSetup');
+    navigate('/');
   }
 
   return (
     <Stack>
-      <div id="settings">
+      {/* <div id="settings">
         <Center>
           <SimulationSettings
             confirmSettings={confirmSettings}
             cancelSettings={cancelSettings}
           />
         </Center>
-      </div>
-      <div id="nodeSetup" hidden>
+      </div> */}
+      <div id="nodeSetup">
         <Center>
           <NodeSelector confirm={confirm} cancel={cancel} />
         </Center>
       </div>
       <div id="content" hidden>
-        <SideBar stepTime={stepTime} stepView={stepView}>
-          <Box p={0}>
+        <SideBar stepTime={stepTime} stepView={stepView} throughput={throughput}>
+          <Box p={0} m={0}>
             <Flex>
               <Box
                 position="absolute"
-                top={100}
-                height={window.innerHeight - 100}
+                top={0}
+                height={window.innerHeight}
                 width={window.innerWidth - 265}
               >
                 <DeckGL

@@ -6,6 +6,7 @@ import { Connection, ConnectionId } from './Connections';
 export type NodeTable = { [id: NodeId]: Host };
 export type LocationTable = { [id: LocationId]: Location };
 export type ConnectionTable = { [id: ConnectionId]: Connection };
+// export type LatencyTable = { [id: LocationId]: number};
 
 export default interface Network {
   validator: NodeId | null;
@@ -19,4 +20,5 @@ export default interface Network {
   logs: any;
   latency: number;
   throughput: number;
+  latencyMatrix: any;
 }

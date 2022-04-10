@@ -2,7 +2,14 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { parse } from 'path';
 import { collapseTextChangeRangesAcrossMultipleVersions } from 'typescript';
 
-import { Host, Network, Connection, ConnectionType, ConnectionId } from '../services';
+import {
+  Host,
+  Network,
+  Connection,
+  ConnectionType,
+  ConnectionId,
+  NodeId,
+} from '../services';
 import Actions from '../services/Actions';
 
 function findNewId(table: { [key: number]: any }) {
@@ -16,8 +23,12 @@ function findNewId(table: { [key: number]: any }) {
   return highestId + 1;
 }
 
-function sim(state: any, action: any) {
-  for (let step = 0; step < action.payload; step++) {
+function findLatencyBetweenNodes(state: any, node1: number, node2: number) {
+  return state.latencyMatrix[state.locations[node1].id][state.locations[node2].id];
+}
+
+function sim(state: any, time: any) {
+  for (let step = 0; step < time; step++) {
     let curActions = state.actionQueue.getActions(state.timeCounter);
 
     for (let i = 0; i < curActions.length; i++) {
@@ -47,7 +58,9 @@ function sim(state: any, action: any) {
                 // state.actionQueue.addActions(a, state.timeCounter + response.processingDelay, [i + ' ' + response.message]);
                 state.actionQueue.addActions(
                   a,
-                  state.timeCounter + response.processingDelay,
+                  state.timeCounter +
+                    response.processingDelay +
+                    findLatencyBetweenNodes(state, a, i),
                   [actionObj]
                 );
               }
@@ -56,14 +69,18 @@ function sim(state: any, action: any) {
             // state.actionQueue.addActions(state.leader, state.timeCounter + response.processingDelay, [i + ' ' + response.message]);
             state.actionQueue.addActions(
               state.leader,
-              state.timeCounter + response.processingDelay,
+              state.timeCounter +
+                response.processingDelay +
+                findLatencyBetweenNodes(state, state.leader, i),
               [actionObj]
             );
           } else {
             // state.actionQueue.addActions(response.targetNode, state.timeCounter + response.processingDelay, [i + ' ' + response.message]);
             state.actionQueue.addActions(
               response.targetNode,
-              state.timeCounter + response.processingDelay,
+              state.timeCounter +
+                response.processingDelay +
+                findLatencyBetweenNodes(state, response.targetNode, i),
               [actionObj]
             );
           }
@@ -71,10 +88,11 @@ function sim(state: any, action: any) {
       }
     }
 
-    const stepAmount = action.payload;
+    const stepAmount = time;
     // state.timeCounter += stepAmount;
     state.timeCounter += 1;
     state.latency = state.viewNumber / state.timeCounter;
+    state.throughput = state.viewNumber / (state.timeCounter / 100);
   }
 }
 
@@ -92,6 +110,7 @@ const network = createSlice({
     logs: null,
     latency: 0,
     throughput: 0,
+    latencyMatrix: {},
   } as Network,
   reducers: {
     // init: (state, action: PayloadAction<void>) => {
@@ -205,6 +224,57 @@ const network = createSlice({
         logs: null,
         latency: 0,
         throughput: 0,
+        // latencies in x100ms
+        latencyMatrix: {
+          0: {
+            0: 0,
+            1: 2,
+            2: 6,
+            3: 21,
+            4: 23,
+            5: 13,
+          },
+          1: {
+            0: 2,
+            1: 0,
+            2: 7,
+            3: 19,
+            4: 21,
+            5: 12,
+          },
+          2: {
+            0: 6,
+            1: 7,
+            2: 0,
+            3: 24,
+            4: 27,
+            5: 19,
+          },
+          3: {
+            0: 21,
+            1: 19,
+            2: 24,
+            3: 0,
+            4: 28,
+            5: 17,
+          },
+          4: {
+            0: 23,
+            1: 21,
+            2: 27,
+            3: 33,
+            4: 0,
+            5: 19,
+          },
+          5: {
+            0: 13,
+            1: 12,
+            2: 19,
+            3: 17,
+            4: 19,
+            5: 0,
+          },
+        },
       };
     },
     setupNodes: (state, action: PayloadAction<void>) => {
@@ -262,7 +332,7 @@ const network = createSlice({
       state.connections[5] = con5;
 
       state.locations[0] = {
-        id: 1,
+        id: 0,
         latitude: 37.54560327062006,
         longitude: -77.44554131810912,
       };
@@ -272,22 +342,22 @@ const network = createSlice({
         longitude: -122.11814177692641,
       };
       state.locations[2] = {
-        id: 1,
+        id: 2,
         latitude: 57.54560327062006,
         longitude: -67.44554131810912,
       };
       state.locations[3] = {
-        id: 1,
+        id: 3,
         latitude: 38.9845498662006,
         longitude: -87.44554131810912,
       };
       state.locations[4] = {
-        id: 1,
+        id: 4,
         latitude: 45.673416976459634,
         longitude: -112.11814177692641,
       };
       state.locations[5] = {
-        id: 1,
+        id: 5,
         latitude: 51.54560327062006,
         longitude: -71.44554131810912,
       };
@@ -296,8 +366,7 @@ const network = createSlice({
       state.timeCounter += 1;
     },
     timestep: (state, action: PayloadAction<number>) => {
-      // console.log(actionType.payload)
-      sim(state, action);
+      sim(state, action.payload);
     },
     chooseValidator: (state, action: PayloadAction<void>) => {
       let randomNum = Math.floor(Math.random() * Object.values(state.nodes).length);
@@ -307,15 +376,10 @@ const network = createSlice({
       state.timeCounter = 50;
     },
     simulate: (state, action: PayloadAction<number>) => {
-      // if (state.viewNumber === 0 || state.leader === null) {
-      //   state.leader = state.nodes[0].getId();
-      //   state.nodes[0].setRoleLeader();
-      //   state.viewNumber += 1;
-      // }
       let targetView = state.viewNumber + action.payload;
-      // while(state.viewNumber < targetView){
-      //   timest
-      // }
+      while (state.viewNumber < targetView) {
+        sim(state, 1);
+      }
     },
     connect: (state, action: PayloadAction<ConnectionType>) => {
       const connection = action.payload;

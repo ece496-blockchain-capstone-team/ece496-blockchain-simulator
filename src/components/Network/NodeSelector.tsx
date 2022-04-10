@@ -49,7 +49,7 @@ export default function NodeSelector({ confirm, cancel }: any) {
             </NumberInput>
           </Box>
           <Box p={6}>
-            <Heading size="sm">Amsterdam</Heading>
+            <Heading size="sm">New York</Heading>
             <NumberInput
               size="md"
               maxW={24}
@@ -66,7 +66,7 @@ export default function NodeSelector({ confirm, cancel }: any) {
             </NumberInput>
           </Box>
           <Box p={6}>
-            <Heading size="sm">Brisbane</Heading>
+            <Heading size="sm">Los Angeles</Heading>
             <NumberInput
               size="md"
               maxW={24}
@@ -83,7 +83,7 @@ export default function NodeSelector({ confirm, cancel }: any) {
             </NumberInput>
           </Box>
           <Box p={6}>
-            <Heading size="sm">Capetown</Heading>
+            <Heading size="sm">Mumbai</Heading>
             <NumberInput
               size="md"
               maxW={24}
@@ -100,7 +100,24 @@ export default function NodeSelector({ confirm, cancel }: any) {
             </NumberInput>
           </Box>
           <Box p={6}>
-            <Heading size="sm">Tokyo</Heading>
+            <Heading size="sm">Cape Town</Heading>
+            <NumberInput
+              size="md"
+              maxW={24}
+              defaultValue={1}
+              onChange={(e) => {
+                nodeNum.Capetown = parseInt(e, 10);
+              }}
+            >
+              <NumberInputField />
+              <NumberInputStepper>
+                <NumberIncrementStepper />
+                <NumberDecrementStepper />
+              </NumberInputStepper>
+            </NumberInput>
+          </Box>
+          <Box p={6}>
+            <Heading size="sm">Moscow</Heading>
             <NumberInput
               size="md"
               maxW={24}

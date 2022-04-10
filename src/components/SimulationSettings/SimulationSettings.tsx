@@ -37,7 +37,7 @@ export default function SimulationSettings({ confirmSettings, cancelSettings }: 
     dispatch(settings.actions.setVotingPower(newVotingPower));
     dispatch(settings.actions.setAntiMaliciousAlgo(newAntiMaliciousAlgo));
     dispatch(settings.actions.setBlockSize(newBlockSize));
-    cancelSettings();
+    confirmSettings();
   }
 
   return (
@@ -106,15 +106,15 @@ export default function SimulationSettings({ confirmSettings, cancelSettings }: 
       <br />
       <Stack direction="row" spacing="20px">
         <Link to="/">
-          <Button size="sm" colorScheme="blue" onClick={() => saveSettings()}>
-            Next
+          <Button size="sm" colorScheme="blue" onClick={() => confirmSettings()}>
+            Back
           </Button>
         </Link>
-        <Link to="/">
+        {/* <Link to="/">
           <Button size="sm" onClick={() => cancelSettings()}>
             Cancel
           </Button>
-        </Link>
+        </Link> */}
       </Stack>
     </Box>
   );
