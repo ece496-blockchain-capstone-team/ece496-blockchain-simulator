@@ -17,7 +17,7 @@ import {
 import settings from '../../slices/settings';
 import { RootState } from '../../store';
 
-export default function SimulationSettings() {
+export default function SimulationSettings({ confirmSettings, cancelSettings }: any) {
   const { stake, electionAlgo, votingPower, antiMaliciousAlgo, blockSize } = useSelector(
     (state: RootState) => state.settings
   );
@@ -31,15 +31,17 @@ export default function SimulationSettings() {
     React.useState(antiMaliciousAlgo);
 
   function saveSettings() {
+    console.log('Saving');
     dispatch(settings.actions.setStake(newStake));
     dispatch(settings.actions.setElectionAlgo(newElectionAlgo));
     dispatch(settings.actions.setVotingPower(newVotingPower));
     dispatch(settings.actions.setAntiMaliciousAlgo(newAntiMaliciousAlgo));
     dispatch(settings.actions.setBlockSize(newBlockSize));
+    confirmSettings();
   }
 
   return (
-    <Box p={4}>
+    <Box p={10}>
       <Heading size="lg">Simulation Settings</Heading>
       <br />
       <Heading size="sm">Staking</Heading>
@@ -105,12 +107,14 @@ export default function SimulationSettings() {
       <Stack direction="row" spacing="20px">
         <Link to="/">
           <Button size="sm" colorScheme="blue" onClick={() => saveSettings()}>
-            Save
+            Back
           </Button>
         </Link>
-        <Link to="/">
-          <Button size="sm">Cancel</Button>
-        </Link>
+        {/* <Link to="/">
+          <Button size="sm" onClick={() => cancelSettings()}>
+            Cancel
+          </Button>
+        </Link> */}
       </Stack>
     </Box>
   );

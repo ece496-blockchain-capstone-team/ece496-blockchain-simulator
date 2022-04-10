@@ -37,7 +37,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from 'recharts';
-import { RootState } from '../../store';
+import { RootState, useAppSelector } from '../../store';
 
 // export default class Metrics extends React.Component {
 export default function Metrics() {
@@ -46,8 +46,20 @@ export default function Metrics() {
     (state: RootState) => state.settings
   );
   // Import metric states
-  const { numNodes, numMaliciousNodes, throughput, finality, nakomotoCoeff } =
-    useSelector((state: RootState) => state.metrics);
+  const numNodes: number = useAppSelector((state) => state.network.totalNodes) as number;
+  const numMaliciousNodes: number = useAppSelector(
+    (state) => state.network.totalMaliciousNodes
+  ) as number;
+  const throughput: number = useAppSelector(
+    (state) => state.network.throughput
+  ) as number;
+  // const finality: number = useAppSelector((state) => state.network.finality) as number;
+  const nakamotoCoeff: number = useAppSelector(
+    (state) => state.network.nakamotoCoeff
+  ) as number;
+  // TODO: use metrics to store over multiple runs
+  // const { numNodes, numMaliciousNodes, throughput, finality, nakamotoCoeff } =
+  //   useSelector((state: RootState) => state.metrics);
   const dispatch = useDispatch();
   const [fileName, setFileName] = React.useState('');
   React.useEffect(() => {
@@ -94,17 +106,17 @@ export default function Metrics() {
       'throughput',
       `${throughput}`,
     ],
+    // [
+    //   'Finality',
+    //   'Time from client to send a transaction to finally be appended on the ledger in seconds.',
+    //   'finality',
+    //   `${finality}`,
+    // ],
     [
-      'Finality',
-      'Time from client to send a transaction to finally be appended on the ledger in seconds.',
-      'finality',
-      `${finality}`,
-    ],
-    [
-      'Nakomoto Coefficient',
+      'Nakamoto Coefficient',
       'Nakamoto coefficient is the number of validators that would need to work together to slow down or block the blockchain from functioning properly. The Nakamoto coefficient depends on the network configuration.',
-      'nakomotoCoeff',
-      `${nakomotoCoeff}`,
+      'nakamotoCoeff',
+      `${nakamotoCoeff}`,
     ],
   ];
 
@@ -201,7 +213,7 @@ export default function Metrics() {
             <Td>throughput</Td>
             <Td>{throughput}</Td>
           </Tr>
-          <Tr>
+          {/* <Tr>
             <Td>Finality</Td>
             <Td>
               Time from client to send a transaction to finally be appended on the ledger
@@ -209,16 +221,16 @@ export default function Metrics() {
             </Td>
             <Td>finality</Td>
             <Td>{finality}</Td>
-          </Tr>
+          </Tr> */}
           <Tr>
-            <Td>Nakomoto Coefficient</Td>
+            <Td>Nakamoto Coefficient</Td>
             <Td>
               Nakamoto coefficient is the number of validators that would need to work
               together to slow down or block the blockchain from functioning properly. The
               Nakamoto coefficient depends on the network configuration.
             </Td>
-            <Td>nakomotoCoeff</Td>
-            <Td>{nakomotoCoeff}</Td>
+            <Td>nakamotoCoeff</Td>
+            <Td>{nakamotoCoeff}</Td>
           </Tr>
         </Tbody>
       </Table>

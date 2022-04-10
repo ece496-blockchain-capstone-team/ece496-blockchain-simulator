@@ -19,14 +19,14 @@ const metrics = createSlice({
     to the mempool too.
     Run simulator for N (maybe 10000) blocks
     */
-    finality: 0, // seconds
+    // finality: 0, // seconds
     /*
     Number of validators that would need to collude together to slow down or
     block the blockchain from functioning properly.
     Depends on config of network and protocol
     Calculated from config
     */
-    nakomotoCoeff: 0, // number of nodes
+    nakamotoCoeff: 1, // number of nodes
   },
   reducers: {
     // actions are called by react component that trigger reducer
@@ -41,11 +41,11 @@ const metrics = createSlice({
     setThroughput: (state, action: PayloadAction<number>) => {
       state.throughput = action.payload;
     },
-    setFinality: (state, action: PayloadAction<number>) => {
-      state.finality = action.payload;
-    },
-    setNakomotoCoeff: (state, action: PayloadAction<number>) => {
-      state.nakomotoCoeff = action.payload;
+    // setFinality: (state, action: PayloadAction<number>) => {
+    //   state.finality = action.payload;
+    // },
+    setnakamotoCoeff: (state, action: PayloadAction<number>) => {
+      state.nakamotoCoeff = action.payload;
     },
   },
 });

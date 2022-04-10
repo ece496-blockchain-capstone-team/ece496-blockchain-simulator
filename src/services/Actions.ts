@@ -2,6 +2,8 @@
  * # Actions
  * A log for the actions of a host
  */
+import { NodeId } from '.';
+
 export default class Actions {
   /**
    * A dictionary with a time value as the key and information about the actions as a value
@@ -13,12 +15,19 @@ export default class Actions {
    * @param time The time value when the actions took place
    * @param actions Information about the actions
    */
-  addActions(time: number, actions: any[]): void {
+  addActions(nodeId: NodeId, time: number, actions: any[]): void {
     if (time in this.action) {
-      this.action[time] = this.action[time].concat(actions);
+      if (nodeId in this.action[time]) {
+        this.action[time][nodeId] = this.action[time][nodeId].concat(actions);
+      } else {
+        this.action[time][nodeId] = [];
+        this.action[time][nodeId].push(actions[0]);
+      }
+      // this.action[time] = this.action[time].concat(actions);
     } else {
       this.action[time] = [];
-      this.action[time].push(actions);
+      this.action[time][nodeId] = [];
+      this.action[time][nodeId].push(actions[0]);
     }
   }
 
