@@ -106,6 +106,9 @@ export default function SideBar(props: any) {
           </NumberInputStepper>
         </NumberInput>
       </Stack>
+      {/* <Stack direction="row" m={6} spacing={4}>
+        <Button onClick={() => props.hostView()}> Host View </Button>
+      </Stack> */}
       <Stack direction="row" m={6} spacing={4}>
         <Button onClick={() => props.stepView(userInput)}> Simulate Blocks </Button>
       </Stack>

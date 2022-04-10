@@ -21,10 +21,11 @@ import { RootState } from '../../store';
 export default function NodeSelector({ confirm, cancel }: any) {
   let nodeNum: any = {};
   nodeNum.Toronto = 1;
-  nodeNum.Amsterdam = 1;
-  nodeNum.Brisbane = 1;
-  nodeNum.Capetown = 1;
-  nodeNum.Tokyo = 1;
+  nodeNum.NewYork = 1;
+  nodeNum.LosAngeles = 1;
+  nodeNum.Mumbai = 1;
+  nodeNum.CapeTown = 1;
+  nodeNum.Moscow = 1;
 
   return (
     <div>
@@ -55,7 +56,7 @@ export default function NodeSelector({ confirm, cancel }: any) {
               maxW={24}
               defaultValue={1}
               onChange={(e) => {
-                nodeNum.Amsterdam = parseInt(e, 10);
+                nodeNum.NewYork = parseInt(e, 10);
               }}
             >
               <NumberInputField />
@@ -72,7 +73,7 @@ export default function NodeSelector({ confirm, cancel }: any) {
               maxW={24}
               defaultValue={1}
               onChange={(e) => {
-                nodeNum.Brisbane = parseInt(e, 10);
+                nodeNum.LosAngeles = parseInt(e, 10);
               }}
             >
               <NumberInputField />
@@ -89,7 +90,7 @@ export default function NodeSelector({ confirm, cancel }: any) {
               maxW={24}
               defaultValue={1}
               onChange={(e) => {
-                nodeNum.Capetown = parseInt(e, 10);
+                nodeNum.Mumbai = parseInt(e, 10);
               }}
             >
               <NumberInputField />
@@ -106,7 +107,7 @@ export default function NodeSelector({ confirm, cancel }: any) {
               maxW={24}
               defaultValue={1}
               onChange={(e) => {
-                nodeNum.Capetown = parseInt(e, 10);
+                nodeNum.CapeTown = parseInt(e, 10);
               }}
             >
               <NumberInputField />
@@ -123,7 +124,7 @@ export default function NodeSelector({ confirm, cancel }: any) {
               maxW={24}
               defaultValue={1}
               onChange={(e) => {
-                nodeNum.Tokyo = parseInt(e, 10);
+                nodeNum.Moscow = parseInt(e, 10);
               }}
             >
               <NumberInputField />

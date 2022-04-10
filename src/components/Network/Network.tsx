@@ -20,6 +20,7 @@ import {
   NodeTable,
 } from '../../services';
 import SideBar from '../SideBar';
+import Host from '../Host';
 import NodeSelector from './NodeSelector';
 
 // Viewport settings
@@ -139,7 +140,7 @@ export default function Network() {
   function confirm(nodeNum: any) {
     console.log('confirm content');
     console.log(nodeNum);
-    dispatch(setupNodes());
+    dispatch(setupNodes(nodeNum));
     toggleItemDisplay('nodeSetup');
     toggleItemDisplay('content');
   }
@@ -149,6 +150,11 @@ export default function Network() {
     toggleItemDisplay('settings');
     toggleItemDisplay('nodeSetup');
     navigate('/');
+  }
+
+  function hostView() {
+    toggleItemDisplay('content');
+    toggleItemDisplay('host');
   }
 
   return (
@@ -166,8 +172,21 @@ export default function Network() {
           <NodeSelector confirm={confirm} cancel={cancel} />
         </Center>
       </div>
+      {/* <div id="host" hidden>
+        <SideBar hostView={hostView} stepTime={stepTime} stepView={stepView} throughput={throughput}>
+          <Box>
+            <Host />
+
+          </Box>
+        </SideBar>
+      </div> */}
       <div id="content" hidden>
-        <SideBar stepTime={stepTime} stepView={stepView} throughput={throughput}>
+        <SideBar
+          hostView={hostView}
+          stepTime={stepTime}
+          stepView={stepView}
+          throughput={throughput}
+        >
           <Box p={0} m={0}>
             <Flex>
               <Box

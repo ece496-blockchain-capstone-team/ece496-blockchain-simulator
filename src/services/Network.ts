@@ -21,4 +21,5 @@ export default interface Network {
   latency: number;
   throughput: number;
   latencyMatrix: any;
+  totalNodes: number;
 }

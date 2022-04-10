@@ -77,6 +77,7 @@ export default class Host {
   static Role = Role;
 
   public viewNum: number;
+  public totalNodes: number;
 
   /**
    * Creates a new host object
@@ -92,6 +93,7 @@ export default class Host {
     location: number,
     stake: number,
     viewNum: number,
+    totalNodes: number,
     role?: Role,
     connections?: NodeId[]
   ) {
@@ -99,6 +101,7 @@ export default class Host {
     this.nodeName = name;
     this.stake = stake;
     this.locationId = location;
+    this.totalNodes = totalNodes;
     if (role) {
       this.role = role;
     } else {
@@ -364,7 +367,7 @@ export default class Host {
   }
   newViewRecv(): any {
     let retAction: any = {};
-    if (this.newVeiwCount < 3 || this.role === Role.Leader) {
+    if (this.newVeiwCount < this.totalNodes - 2 || this.role === Role.Leader) {
       this.newVeiwCount += 1;
       return retAction;
     }
@@ -409,7 +412,7 @@ export default class Host {
     if (this.role !== Role.Leader) {
       return retAction;
     }
-    if (this.prepareVoteCount < 4) {
+    if (this.prepareVoteCount < this.totalNodes - 2) {
       this.prepareVoteCount += 1;
       return retAction;
     }
@@ -446,7 +449,7 @@ export default class Host {
     if (this.role !== Role.Leader) {
       return retAction;
     }
-    if (this.preCommitVoteCount < 4) {
+    if (this.preCommitVoteCount < this.totalNodes - 2) {
       this.preCommitVoteCount += 1;
       return retAction;
     }
@@ -479,7 +482,7 @@ export default class Host {
     if (this.role !== Role.Leader) {
       return retAction;
     }
-    if (this.commitVoteCount < 4) {
+    if (this.commitVoteCount < this.totalNodes - 2) {
       this.commitVoteCount += 1;
       return retAction;
     }
