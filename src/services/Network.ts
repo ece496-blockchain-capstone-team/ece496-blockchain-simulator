@@ -18,8 +18,10 @@ export default interface Network {
   leader: NodeId;
   actionQueue: Actions;
   logs: any;
-  latency: number;
+  finality: number;
   throughput: number;
   latencyMatrix: any;
   totalNodes: number;
+  totalMaliciousNodes: number;
+  nakamotoCoeff: number;
 }

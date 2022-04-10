@@ -106,7 +106,7 @@ export default function SimulationSettings({ confirmSettings, cancelSettings }: 
       <br />
       <Stack direction="row" spacing="20px">
         <Link to="/">
-          <Button size="sm" colorScheme="blue" onClick={() => confirmSettings()}>
+          <Button size="sm" colorScheme="blue" onClick={() => saveSettings()}>
             Back
           </Button>
         </Link>
