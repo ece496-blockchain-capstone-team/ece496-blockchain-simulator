@@ -86,9 +86,9 @@ export default function Host() {
                   </Tr>
                   <Tr>
                     <Th> Consensus Stage: </Th>
-                    <Td> {selectedNode.getLastActionTime()} </Td>
+                    <Td> {selectedNode.getConsensusStage()} </Td>
                     <Th> Chain Length: </Th>
-                    <Td> {selectedNode.getLastLeaderTime()} </Td>
+                    <Td> {selectedNode.getChainLength()} </Td>
                   </Tr>
                   <Tr>
                     <Th> Last action time: </Th>

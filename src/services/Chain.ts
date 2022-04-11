@@ -67,6 +67,10 @@ export default class ChainObj {
     return this.chainId;
   }
 
+  getChainLength(): number {
+    return this.chain.length;
+  }
+
   /**
    * Gets chain version
    * @returns chain verison

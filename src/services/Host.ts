@@ -298,6 +298,10 @@ export default class Host {
     return this.chain;
   }
 
+  getChainLength(): number {
+    return this.chain.getChainLength();
+  }
+
   /**
    * @returns The most recent time value when this node was the leader
    */
@@ -335,10 +339,15 @@ export default class Host {
   private preCommitVoteCount: number = 0;
   private commitVoteCount: number = 0;
 
+  getConsensusStage(): String {
+    return this.stage;
+  }
+
   processAction(act: any): any {
     let retAction: any = {};
     // console.log(act);
     // if(act.split(" ")[1] === "new-view"){
+    this.lastActionTime = act.time;
     if (act.act === 'new-view') {
       return this.newViewRecv();
     }
@@ -498,6 +507,7 @@ export default class Host {
     retAction.viewNum = this.viewNum;
     this.stage = Stage.None;
     this.setRoleGeneral();
+    this.lastLeaderTime = this.lastActionTime;
     return retAction;
   }
   decideRecv(requestView: number, block: BlockObj): any {
