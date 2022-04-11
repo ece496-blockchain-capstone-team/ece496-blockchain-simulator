@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { readFileSync } from 'fs';
+
 import {
   Heading,
   Button,
@@ -11,7 +13,13 @@ import {
   FormHelperText,
   Input,
   Box,
+  Tabs,
+  TabList,
+  TabPanels,
+  Tab,
+  TabPanel,
   Table,
+  Text,
   Thead,
   Tbody,
   Tfoot,
@@ -20,7 +28,166 @@ import {
   Td,
   TableCaption,
 } from '@chakra-ui/react';
-import { RootState } from '../../store';
+import {
+  ScatterChart,
+  Scatter,
+  XAxis,
+  YAxis,
+  ZAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  Label,
+  ResponsiveContainer,
+} from 'recharts';
+
+import { RootState, useAppSelector } from '../../store';
+
+function genColour(): string {
+  let r = Math.floor(Math.random() * 255);
+  let g = Math.floor(Math.random() * 255);
+  let b = Math.floor(Math.random() * 255);
+  return 'rgb(' + r + ',' + g + ',' + b + ')';
+}
+
+interface IMetricsFile {
+  fileName: string;
+  stake: number;
+  votingPower: number;
+  electionAlgo: number;
+  antiMaliciousAlgo: number;
+  blockSize: number;
+  numNodes: number;
+  numMaliciousNodes: number;
+  throughput: number;
+  nakamotoCoeff: number;
+}
+
+class MetricsFile implements IMetricsFile {
+  fileName: string;
+  stake: number;
+  votingPower: number;
+  electionAlgo: number;
+  antiMaliciousAlgo: number;
+  blockSize: number;
+  numNodes: number;
+  numMaliciousNodes: number;
+  throughput: number;
+  throughputKiB: number;
+  nakamotoCoeff: number;
+  fill: string;
+
+  constructor(
+    fileName: string,
+    stake: number,
+    votingPower: number,
+    electionAlgo: number,
+    antiMaliciousAlgo: number,
+    blockSize: number,
+    numNodes: number,
+    numMaliciousNodes: number,
+    throughput: number,
+    nakamotoCoeff: number
+  ) {
+    this.fileName = fileName;
+    this.stake = stake;
+    this.votingPower = votingPower;
+    this.electionAlgo = electionAlgo;
+    this.antiMaliciousAlgo = antiMaliciousAlgo;
+    this.blockSize = blockSize;
+    this.numNodes = numNodes;
+    this.numMaliciousNodes = numMaliciousNodes;
+    this.throughput = throughput;
+    this.throughputKiB = throughput / blockSize;
+    this.nakamotoCoeff = nakamotoCoeff;
+    this.fill = genColour();
+  }
+
+  // Getters
+  getFileName(): string {
+    return this.fileName;
+  }
+  getStake(): number {
+    return this.stake;
+  }
+  getVotingPower(): number {
+    return this.votingPower;
+  }
+  getElectionAlgo(): number {
+    return this.electionAlgo;
+  }
+  getAntiMaliciousAlgo(): number {
+    return this.antiMaliciousAlgo;
+  }
+  getBlockSize(): number {
+    return this.blockSize;
+  }
+  getNumNodes(): number {
+    return this.numNodes;
+  }
+  getNumMaliciousNodes(): number {
+    return this.numMaliciousNodes;
+  }
+  getThroughput(): number {
+    return this.throughput;
+  }
+  getThroughputKiB(): number {
+    return this.throughputKiB;
+  }
+  getNakamotoCoeff(): number {
+    return this.nakamotoCoeff;
+  }
+  getFill(): string {
+    return this.fill;
+  }
+
+  // Setters
+  setFileName(fn: string) {
+    this.fileName = fn;
+  }
+  setStake(s: number) {
+    this.stake = s;
+  }
+  setVotingPower(vp: number) {
+    this.votingPower = vp;
+  }
+  setElectionAlgo(ea: number) {
+    this.electionAlgo = ea;
+  }
+  setAntiMaliciousAlgo(ama: number) {
+    this.antiMaliciousAlgo = ama;
+  }
+  setBlockSize(bs: number) {
+    this.blockSize = bs;
+  }
+  setNumNodes(nn: number) {
+    this.numNodes = nn;
+  }
+  setNumMaliciousNodes(nmn: number) {
+    this.numMaliciousNodes = nmn;
+  }
+  setThroughput(t: number) {
+    this.throughput = t;
+  }
+  setThroughputKiB(tk: number) {
+    this.throughputKiB = tk;
+  }
+  setNakamotoCoeff(nc: number) {
+    this.nakamotoCoeff = nc;
+  }
+  setFill(f: string) {
+    this.fill = f;
+  }
+
+  // Calculate throughputKiB
+  calcThroughputKiB() {
+    if (this.blockSize > 0) {
+      this.throughputKiB = this.throughput * this.blockSize;
+    } else {
+      this.throughputKiB = 0;
+    }
+  }
+}
 
 // export default class Metrics extends React.Component {
 export default function Metrics() {
@@ -29,16 +196,34 @@ export default function Metrics() {
     (state: RootState) => state.settings
   );
   // Import metric states
-  const { numNodes, numLeaders, numMaliciousNodes, throughput, finality, nakomotoCoeff } =
-    useSelector((state: RootState) => state.metrics);
+  const numNodes: number = useAppSelector((state) => state.network.totalNodes) as number;
+  const numMaliciousNodes: number = useAppSelector(
+    (state) => state.network.totalMaliciousNodes
+  ) as number;
+  const throughput: number = useAppSelector(
+    (state) => state.network.throughput
+  ) as number;
+  // const finality: number = useAppSelector((state) => state.network.finality) as number;
+  const nakamotoCoeff: number = useAppSelector(
+    (state) => state.network.nakamotoCoeff
+  ) as number;
+  // TODO: use metrics to store over multiple runs
+  // const { numNodes, numMaliciousNodes, throughput, finality, nakamotoCoeff } =
+  //   useSelector((state: RootState) => state.metrics);
   const dispatch = useDispatch();
-  const [fileName, setFileName] = React.useState('');
-  React.useEffect(() => {
-    setFileName('blockchainSimMetrics.csv');
-  }, ['blockchainSimMetrics.csv']);
+  const [fileName, setFileName] = React.useState('blockchainSimMetrics.csv');
+  const [currInputFile, setCurrInputFile] = React.useState<File | null>(null);
+  const [inputFiles, setInputFiles] = React.useState<Array<MetricsFile>>([]);
+
+  const HEADERS: string[] = [
+    'Parameter Name',
+    'Description',
+    'Parameter Variable',
+    'Value',
+  ];
 
   let csvData = [
-    ['Parameter Name', 'Description', 'Parameter Variable', 'Value'],
+    HEADERS,
     [
       'Staking',
       'Type of stake setup. 1 = Same stake for every host. 2 = Random stake',
@@ -65,7 +250,6 @@ export default function Metrics() {
     ],
     ['Block Size', 'Size of each block in KiB.', 'blockSize', `${blockSize}`],
     ['Number of Nodes', 'Number of nodes in network.', 'numNodes', `${numNodes}`],
-    ['Number of Leaders', 'Number of leaders in network.', 'numLeaders', `${numLeaders}`],
     [
       'Number of Malicious Nodes',
       'Number of malicious nodes in network.',
@@ -78,17 +262,17 @@ export default function Metrics() {
       'throughput',
       `${throughput}`,
     ],
+    // [
+    //   'Finality',
+    //   'Time from client to send a transaction to finally be appended on the ledger in seconds.',
+    //   'finality',
+    //   `${finality}`,
+    // ],
     [
-      'Finality',
-      'Time from client to send a transaction to finally be appended on the ledger in seconds.',
-      'finality',
-      `${finality}`,
-    ],
-    [
-      'Nakomoto Coefficient',
+      'Nakamoto Coefficient',
       'Nakamoto coefficient is the number of validators that would need to work together to slow down or block the blockchain from functioning properly. The Nakamoto coefficient depends on the network configuration.',
-      'nakomotoCoeff',
-      `${nakomotoCoeff}`,
+      'nakamotoCoeff',
+      `${nakamotoCoeff}`,
     ],
   ];
 
@@ -107,13 +291,9 @@ export default function Metrics() {
     element.click();
   }
 
-  return (
-    <div className="MetricsView">
-      <Box p={4}>
-        <Heading size="lg">Metrics Dashboard</Heading>
-        <br />
-        <p>View and download metrics related to the current configuration.</p>
-        <br />
+  function loadTableView() {
+    return (
+      <>
         <Table size="lg" variant="simple" width="fill">
           <Tbody>
             <Tr>
@@ -176,12 +356,6 @@ export default function Metrics() {
               <Td>{numNodes}</Td>
             </Tr>
             <Tr>
-              <Td>Number of Leaders</Td>
-              <Td>Number of leaders in network.</Td>
-              <Td>numLeaders</Td>
-              <Td>{numLeaders}</Td>
-            </Tr>
-            <Tr>
               <Td>Number of Malicious Nodes</Td>
               <Td>Number of malicious nodes in network.</Td>
               <Td>numMaliciousNodes</Td>
@@ -196,30 +370,27 @@ export default function Metrics() {
               <Td>throughput</Td>
               <Td>{throughput}</Td>
             </Tr>
+            {/* <Tr>
+            <Td>Finality</Td>
+            <Td>
+              Time from client to send a transaction to finally be appended on the ledger
+              in seconds.
+            </Td>
+            <Td>finality</Td>
+            <Td>{finality}</Td>
+          </Tr> */}
             <Tr>
-              <Td>Finality</Td>
-              <Td>
-                Time from client to send a transaction to finally be appended on the
-                ledger in seconds.
-              </Td>
-              <Td>finality</Td>
-              <Td>{finality}</Td>
-            </Tr>
-            <Tr>
-              <Td>Nakomoto Coefficient</Td>
+              <Td>Nakamoto Coefficient</Td>
               <Td>
                 Nakamoto coefficient is the number of validators that would need to work
                 together to slow down or block the blockchain from functioning properly.
                 The Nakamoto coefficient depends on the network configuration.
               </Td>
-              <Td>nakomotoCoeff</Td>
-              <Td>{nakomotoCoeff}</Td>
+              <Td>nakamotoCoeff</Td>
+              <Td>{nakamotoCoeff}</Td>
             </Tr>
           </Tbody>
         </Table>
-        <br />
-        <p>To save these metrics to CSV, please input the CSV name:</p>
-        <br />
         <FormControl>
           <FormLabel htmlFor="csv-name">CSV Name</FormLabel>
           <Input
@@ -232,16 +403,223 @@ export default function Metrics() {
         </FormControl>
         <br />
         <Stack direction="row" spacing="20px">
+          <Button size="sm" colorScheme="teal" onClick={() => saveMetricsAsCSV()}>
+            Save as CSV
+          </Button>
           <Link to="/">
-            <Button size="sm" colorScheme="blue" onClick={() => saveMetricsAsCSV()}>
-              Save as CSV
+            <Button size="sm" colorScheme="gray">
+              Cancel
             </Button>
-          </Link>
-          <Link to="/">
-            <Button size="sm">Cancel</Button>
           </Link>
         </Stack>
         <br />
+      </>
+    );
+  }
+
+  function onInputFileChange() {
+    let reader = new FileReader();
+    if (currInputFile != null) {
+      reader.readAsText(currInputFile);
+      reader.onload = function readerOnload() {
+        // Note: can only use reader.result here
+        let resultStr: string = reader.result as string;
+        let resultLines: string[] = resultStr.split(/\r?\n/);
+        // Check if headers are same as file
+        let loadedHeaders = resultLines[0].split(',');
+        for (let i = 1; i < HEADERS.length; i++) {
+          if (HEADERS[i] !== loadedHeaders[i]) {
+            console.log('Error: Invalid file headers.');
+            return;
+          }
+        }
+        let mFile: MetricsFile = new MetricsFile(
+          currInputFile.name,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        );
+        for (let i = 1; i < resultLines.length; i++) {
+          let params = resultLines[i].split(',');
+          if (params.length === HEADERS.length) {
+            let paramVar = params[2];
+            let paramVal = params[3];
+            if (paramVar === 'stake') {
+              mFile.setStake(Number(paramVal));
+            } else if (paramVar === 'votingPower') {
+              mFile.setVotingPower(Number(paramVal));
+            } else if (paramVar === 'electionAlgo') {
+              mFile.setElectionAlgo(Number(paramVal));
+            } else if (paramVar === 'antiMaliciousAlgo') {
+              mFile.setAntiMaliciousAlgo(Number(paramVal));
+            } else if (paramVar === 'blockSize') {
+              mFile.setBlockSize(Number(paramVal));
+            } else if (paramVar === 'numNodes') {
+              mFile.setNumNodes(Number(paramVal));
+            } else if (paramVar === 'numMaliciousNodes') {
+              mFile.setNumMaliciousNodes(Number(paramVal));
+            } else if (paramVar === 'throughput') {
+              mFile.setThroughput(Number(paramVal));
+            } else if (paramVar === 'nakamotoCoeff') {
+              mFile.setNakamotoCoeff(Number(paramVal));
+            }
+          }
+        }
+        mFile.calcThroughputKiB();
+
+        // Replace duplicate file if existing
+        let tmpInputFiles = inputFiles;
+        const dupIdx = tmpInputFiles.findIndex(
+          (obj) => obj.getFileName() === mFile.getFileName()
+        );
+        if (dupIdx !== -1) {
+          tmpInputFiles.splice(dupIdx, 1);
+        }
+
+        // Add to input files list
+        setInputFiles([...tmpInputFiles, mFile]);
+      };
+
+      reader.onerror = function readerOnFailure() {
+        console.log('Error trying to read file.');
+      };
+    }
+  }
+
+  function loadGraphView() {
+    return (
+      <>
+        <Text>
+          Upload your previously downloaded metrics csv files here. Each file must have a
+          unique name.
+        </Text>
+        <br />
+        <Stack direction="row" spacing="20px">
+          <input
+            type="file"
+            width="auto"
+            onChange={(event) =>
+              event && event.target && event.target.files && event.target.files[0]
+                ? setCurrInputFile(event.target.files[0])
+                : null
+            }
+          />
+          <Button size="sm" colorScheme="teal" onClick={() => onInputFileChange()}>
+            Upload
+          </Button>
+        </Stack>
+
+        <br />
+        <Heading size="md">Throughput (blocks/sec) vs # Nodes</Heading>
+        <br />
+        <Box width="60%">
+          <ScatterChart
+            width={800}
+            height={400}
+            margin={{
+              top: 20,
+              right: 20,
+              bottom: 20,
+              left: 20,
+            }}
+          >
+            <CartesianGrid />
+            <XAxis type="number" dataKey="x" name="numNodes" unit="">
+              <Label value="Number of Nodes" offset={0} position="bottom" fill="gray" />
+            </XAxis>
+            <YAxis type="number" dataKey="y" name="throughput" unit="">
+              <Label
+                value="Throughput (blocks/sec)"
+                angle={270}
+                offset={0}
+                position="left"
+                fill="gray"
+              />
+            </YAxis>
+            <ZAxis type="number" range={[100]} />
+            <Tooltip cursor={{ strokeDasharray: '3 3' }} />
+            <Legend layout="vertical" verticalAlign="top" align="right" />
+            {inputFiles.map((file) => (
+              <Scatter
+                key={file.fileName}
+                name={file.fileName}
+                data={[{ x: file.numNodes, y: file.throughput }]}
+                fill={file.fill}
+              />
+            ))}
+          </ScatterChart>
+        </Box>
+        <br />
+        <Heading size="md">Throughput (KiB/sec) vs # Nodes</Heading>
+        <br />
+        <Box width="60%">
+          <ScatterChart
+            width={800}
+            height={400}
+            margin={{
+              top: 20,
+              right: 20,
+              bottom: 20,
+              left: 20,
+            }}
+          >
+            <CartesianGrid />
+            <XAxis type="number" dataKey="x" name="numNodes" unit="">
+              <Label value="Number of Nodes" offset={0} position="bottom" fill="gray" />
+            </XAxis>
+            <YAxis type="number" dataKey="y" name="throughput" unit="">
+              <Label
+                value="Throughput (KiB/sec)"
+                angle={270}
+                offset={0}
+                position="left"
+                fill="gray"
+              />
+            </YAxis>
+            <ZAxis type="number" range={[100]} />
+            <Tooltip cursor={{ strokeDasharray: '3 3' }} />
+            <Legend layout="vertical" verticalAlign="top" align="right" />
+            {inputFiles.map((file) => (
+              <Scatter
+                key={file.fileName}
+                name={file.fileName}
+                data={[{ x: file.numNodes, y: file.throughputKiB }]}
+                fill={file.fill}
+              />
+            ))}
+          </ScatterChart>
+        </Box>
+        <br />
+      </>
+    );
+  }
+
+  return (
+    <div className="MetricsView">
+      <Box p={4}>
+        <Heading size="lg">Metrics Dashboard</Heading>
+        <br />
+        <Text>
+          View and download metrics related to the current configuration or upload
+          downloaded metrics CSVs to generate graphs.
+        </Text>
+        <br />
+        <Tabs colorScheme="teal">
+          <TabList>
+            <Tab>Table</Tab>
+            <Tab>Graph</Tab>
+          </TabList>
+          <TabPanels>
+            <TabPanel>{loadTableView()}</TabPanel>
+            <TabPanel>{loadGraphView()}</TabPanel>
+          </TabPanels>
+        </Tabs>
       </Box>
     </div>
   );

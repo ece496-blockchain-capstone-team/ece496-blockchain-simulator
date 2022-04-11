@@ -13,10 +13,10 @@ export default function NavLinks() {
         <LinkItem to="/">Home</LinkItem>
         <LinkItem to="/network">Network</LinkItem>
         <LinkItem to="/host">Host</LinkItem>
-        <LinkItem to="/chain">Chain</LinkItem>
-        <LinkItem to="/block">Block</LinkItem>
+        {/* <LinkItem to="/chain">Chain</LinkItem>
+        <LinkItem to="/block">Block</LinkItem> */}
         <LinkItem to="/metrics">Metrics</LinkItem>
-        <LinkItem to="/simulation-settings">Settings</LinkItem>
+        {/* <LinkItem to="/simulation-settings">Settings</LinkItem> */}
       </Stack>
     </Box>
   );

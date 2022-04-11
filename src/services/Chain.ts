@@ -14,11 +14,11 @@ export default class ChainObj {
     this.chainId = chainId;
     this.version = 1;
     this.chain = [BlockObj.genesisBlock()];
-    this.addBlock('Test Data 2');
-    this.addBlock('Test Data 3');
-    this.addBlock('Test Data 4');
-    this.addBlock('Test Data 5');
-    this.addBlock('Test Data 6');
+    // this.addBlock('Test Data 2');
+    // this.addBlock('Test Data 3');
+    // this.addBlock('Test Data 4');
+    // this.addBlock('Test Data 5');
+    // this.addBlock('Test Data 6');
   }
 
   // ***************************************************************************
@@ -65,6 +65,10 @@ export default class ChainObj {
    */
   getChainId(): number {
     return this.chainId;
+  }
+
+  getChainLength(): number {
+    return this.chain.length;
   }
 
   /**

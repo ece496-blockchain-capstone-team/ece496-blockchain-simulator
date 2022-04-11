@@ -47,6 +47,7 @@
         "no-console": "off",
         "react/no-unused-state": "off",
         "prefer-template": "off",
-        "no-param-reassign": "off"
+        "no-param-reassign": "off",
+        "react/jsx-no-bind": "off"
     }
 }

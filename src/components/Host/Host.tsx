@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Heading,
   Box,
@@ -18,10 +18,11 @@ import { useSearchParams } from 'react-router-dom';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 
-import { useAppSelector } from '../../store';
+import { useAppSelector, useAppDispatch } from '../../store';
 
 import { NodeTable } from '../../services';
 import Chain from '../Chain';
+import SideBar from '../SideBar';
 
 export default function Host() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -85,9 +86,9 @@ export default function Host() {
                   </Tr>
                   <Tr>
                     <Th> Consensus Stage: </Th>
-                    <Td> {selectedNode.getLastActionTime()} </Td>
+                    <Td> {selectedNode.getConsensusStage()} </Td>
                     <Th> Chain Length: </Th>
-                    <Td> {selectedNode.getLastLeaderTime()} </Td>
+                    <Td> {selectedNode.getChainLength()} </Td>
                   </Tr>
                   <Tr>
                     <Th> Last action time: </Th>
