@@ -40,7 +40,7 @@ function sim(state: any, time: any) {
           let actionObj: any = {};
           actionObj.act = response.message;
           actionObj.sender = i;
-          actionObj.time = state.timeCounter;
+          actionObj.time = state.timeCounter * 10;
           if (Object.keys(response).length === 0) {
             // console.log("No action");
           } else if (response.action === 'brodcast') {
