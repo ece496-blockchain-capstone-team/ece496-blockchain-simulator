@@ -67,7 +67,9 @@ export default function Network() {
   const throughput: number = useAppSelector(
     (state) => state.network.throughput
   ) as number;
-  const time: number = useAppSelector((state) => state.network.timeCounter) as number;
+  const time: number = useAppSelector(
+    (state) => state.network.timeCounter * 10
+  ) as number;
   // const throughput: number = useAppSelector((state) => state.network.throughput) as number;
 
   const nodes: NodeTable = useAppSelector((state) => state.network.nodes) as NodeTable;
@@ -140,6 +142,7 @@ export default function Network() {
             stepTime={(userInput: number) => dispatch(timestep(userInput))}
             stepView={(userInput: number) => dispatch(simulate(userInput))}
             throughput={throughput}
+            time={time}
           >
             <Box p={0} m={0}>
               <Flex>

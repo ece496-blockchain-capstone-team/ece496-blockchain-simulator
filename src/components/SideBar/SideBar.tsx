@@ -80,6 +80,14 @@ export default function SideBar(props: any) {
         {props.children}
       </Box>
       <Stack direction="row" m={6} spacing={4}>
+        <Box p={0}>Simulation Time:</Box>
+      </Stack>
+      <Stack direction="row" m={6} spacing={4}>
+        <Box w={200} borderWidth={5} borderColor="teal" p={5}>
+          {props.time} ms
+        </Box>
+      </Stack>
+      <Stack direction="row" m={6} spacing={4}>
         <Box p={0}>Throughput (Blocks/sec):</Box>
       </Stack>
       <Stack direction="row" m={6} spacing={4}>
@@ -88,7 +96,7 @@ export default function SideBar(props: any) {
         </Box>
       </Stack>
       <Stack direction="row" m={6} spacing={4}>
-        <Box h="65vh"> </Box>
+        <Box h="50vh"> </Box>
         {/* <Box mt={800}> </Box> */}
       </Stack>
       <Stack direction="row" m={6} spacing={4}>
