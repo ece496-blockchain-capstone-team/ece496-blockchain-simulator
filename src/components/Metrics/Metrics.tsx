@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { readFileSync } from 'fs';
 import {
   Heading,
   Button,
@@ -39,6 +40,19 @@ import {
 } from 'recharts';
 import { RootState, useAppSelector } from '../../store';
 
+interface MetricsFile {
+  fileName: string;
+  stake: number;
+  votingPower: number;
+  electionAlgo: number;
+  antiMaliciousAlgo: number;
+  blockSize: number;
+  numNodes: number;
+  numMaliciousNodes: number;
+  throughput: number;
+  nakamotoCoeff: number;
+}
+
 // export default class Metrics extends React.Component {
 export default function Metrics() {
   // Import setting states
@@ -61,10 +75,14 @@ export default function Metrics() {
   // const { numNodes, numMaliciousNodes, throughput, finality, nakamotoCoeff } =
   //   useSelector((state: RootState) => state.metrics);
   const dispatch = useDispatch();
-  const [fileName, setFileName] = React.useState('');
-  React.useEffect(() => {
-    setFileName('blockchainSimMetrics.csv');
-  }, ['blockchainSimMetrics.csv']);
+  const [fileName, setFileName] = React.useState('blockchainSimMetrics.csv');
+  const [currInputFile, setCurrInputFile] = React.useState<File | null>(null);
+  const [inputFiles, setInputFiles] = React.useState<Array<MetricsFile>>([]);
+
+  // TODO: Adds file
+  // setInputFiles([inputFiles..., 'foo.bar']);
+  // TODO: removes file
+  // setInputFiles(inputFiles.filter(name => 'foo.bar' !== name));
 
   let csvData = [
     ['Parameter Name', 'Description', 'Parameter Variable', 'Value'],
@@ -137,83 +155,84 @@ export default function Metrics() {
 
   function loadTableView() {
     return (
-      <Table size="lg" variant="simple" width="fill">
-        <Tbody>
-          <Tr>
-            <Th>Parameter Name</Th>
-            <Th>Description</Th>
-            <Th>Parameter Variable</Th>
-            <Th>Value</Th>
-          </Tr>
-          <Tr>
-            <Td>Staking</Td>
-            <Td>
-              Type of stake setup.
-              <br />1 = Same stake for every host.
-              <br />2 = Random stake.
-            </Td>
-            <Td>stake</Td>
-            <Td>{stake}</Td>
-          </Tr>
-          <Tr>
-            <Td>Voting Power</Td>
-            <Td>
-              Division of voting power.
-              <br />1 = Host&apos;s stake divided by total stake.
-              <br />2 = Equal voting power for all hosts.
-            </Td>
-            <Td>votingPower</Td>
-            <Td>{votingPower}</Td>
-          </Tr>
-          <Tr>
-            <Td>Leader Election Method</Td>
-            <Td>
-              Leader election method.
-              <br />1 = Round robin, ordered by voting power.
-              <br />2 = Round robin, random order.
-              <br />3 = Completely random each time.
-            </Td>
-            <Td>electionAlgo</Td>
-            <Td>{electionAlgo}</Td>
-          </Tr>
-          <Tr>
-            <Td>Anti-Malicious Algorithm</Td>
-            <Td>
-              Type of anti-malicious algorithm implemented.
-              <br />1 = None.
-              <br />2 = Byzantine Fault Tolerance.
-            </Td>
-            <Td>antiMaliciousAlgo</Td>
-            <Td>{antiMaliciousAlgo}</Td>
-          </Tr>
-          <Tr>
-            <Td>Block Size</Td>
-            <Td>Size of each block in KiB.</Td>
-            <Td>blockSize</Td>
-            <Td>{blockSize}</Td>
-          </Tr>
-          <Tr>
-            <Td>Number of Nodes</Td>
-            <Td>Number of nodes in network.</Td>
-            <Td>numNodes</Td>
-            <Td>{numNodes}</Td>
-          </Tr>
-          <Tr>
-            <Td>Number of Malicious Nodes</Td>
-            <Td>Number of malicious nodes in network.</Td>
-            <Td>numMaliciousNodes</Td>
-            <Td>{numMaliciousNodes}</Td>
-          </Tr>
-          <Tr>
-            <Td>Throughput</Td>
-            <Td>
-              Number of blocks added to ledger per second where a block is considered
-              added if a block reaches a quorum.
-            </Td>
-            <Td>throughput</Td>
-            <Td>{throughput}</Td>
-          </Tr>
-          {/* <Tr>
+      <>
+        <Table size="lg" variant="simple" width="fill">
+          <Tbody>
+            <Tr>
+              <Th>Parameter Name</Th>
+              <Th>Description</Th>
+              <Th>Parameter Variable</Th>
+              <Th>Value</Th>
+            </Tr>
+            <Tr>
+              <Td>Staking</Td>
+              <Td>
+                Type of stake setup.
+                <br />1 = Same stake for every host.
+                <br />2 = Random stake.
+              </Td>
+              <Td>stake</Td>
+              <Td>{stake}</Td>
+            </Tr>
+            <Tr>
+              <Td>Voting Power</Td>
+              <Td>
+                Division of voting power.
+                <br />1 = Host&apos;s stake divided by total stake.
+                <br />2 = Equal voting power for all hosts.
+              </Td>
+              <Td>votingPower</Td>
+              <Td>{votingPower}</Td>
+            </Tr>
+            <Tr>
+              <Td>Leader Election Method</Td>
+              <Td>
+                Leader election method.
+                <br />1 = Round robin, ordered by voting power.
+                <br />2 = Round robin, random order.
+                <br />3 = Completely random each time.
+              </Td>
+              <Td>electionAlgo</Td>
+              <Td>{electionAlgo}</Td>
+            </Tr>
+            <Tr>
+              <Td>Anti-Malicious Algorithm</Td>
+              <Td>
+                Type of anti-malicious algorithm implemented.
+                <br />1 = None.
+                <br />2 = Byzantine Fault Tolerance.
+              </Td>
+              <Td>antiMaliciousAlgo</Td>
+              <Td>{antiMaliciousAlgo}</Td>
+            </Tr>
+            <Tr>
+              <Td>Block Size</Td>
+              <Td>Size of each block in KiB.</Td>
+              <Td>blockSize</Td>
+              <Td>{blockSize}</Td>
+            </Tr>
+            <Tr>
+              <Td>Number of Nodes</Td>
+              <Td>Number of nodes in network.</Td>
+              <Td>numNodes</Td>
+              <Td>{numNodes}</Td>
+            </Tr>
+            <Tr>
+              <Td>Number of Malicious Nodes</Td>
+              <Td>Number of malicious nodes in network.</Td>
+              <Td>numMaliciousNodes</Td>
+              <Td>{numMaliciousNodes}</Td>
+            </Tr>
+            <Tr>
+              <Td>Throughput</Td>
+              <Td>
+                Number of blocks added to ledger per second where a block is considered
+                added if a block reaches a quorum.
+              </Td>
+              <Td>throughput</Td>
+              <Td>{throughput}</Td>
+            </Tr>
+            {/* <Tr>
             <Td>Finality</Td>
             <Td>
               Time from client to send a transaction to finally be appended on the ledger
@@ -222,18 +241,41 @@ export default function Metrics() {
             <Td>finality</Td>
             <Td>{finality}</Td>
           </Tr> */}
-          <Tr>
-            <Td>Nakamoto Coefficient</Td>
-            <Td>
-              Nakamoto coefficient is the number of validators that would need to work
-              together to slow down or block the blockchain from functioning properly. The
-              Nakamoto coefficient depends on the network configuration.
-            </Td>
-            <Td>nakamotoCoeff</Td>
-            <Td>{nakamotoCoeff}</Td>
-          </Tr>
-        </Tbody>
-      </Table>
+            <Tr>
+              <Td>Nakamoto Coefficient</Td>
+              <Td>
+                Nakamoto coefficient is the number of validators that would need to work
+                together to slow down or block the blockchain from functioning properly.
+                The Nakamoto coefficient depends on the network configuration.
+              </Td>
+              <Td>nakamotoCoeff</Td>
+              <Td>{nakamotoCoeff}</Td>
+            </Tr>
+          </Tbody>
+        </Table>
+        <FormControl>
+          <FormLabel htmlFor="csv-name">CSV Name</FormLabel>
+          <Input
+            id="csv-name"
+            placeholder="CSV name"
+            size="sm"
+            width="fill"
+            onChange={(event) => setFileName(event.target.value)}
+          />
+        </FormControl>
+        <br />
+        <Stack direction="row" spacing="20px">
+          <Button size="sm" colorScheme="teal" onClick={() => saveMetricsAsCSV()}>
+            Save as CSV
+          </Button>
+          <Link to="/">
+            <Button size="sm" colorScheme="gray">
+              Cancel
+            </Button>
+          </Link>
+        </Stack>
+        <br />
+      </>
     );
   }
 
@@ -257,10 +299,65 @@ export default function Metrics() {
     { x: 120, y: 190 },
   ];
 
+  function onInputFileChange() {
+    let reader = new FileReader();
+    if (currInputFile != null) {
+      // TODO: implement this
+      const tmpFile: File = currInputFile;
+      console.log('before read as text');
+      reader.readAsText(currInputFile);
+      console.log('after read as text');
+
+      console.log(reader.result);
+      reader.onload = function readerOnload() {
+        console.log('setting reader onload');
+        console.log('readerresult');
+        console.log(reader.result);
+      };
+      console.log('after');
+      console.log(reader.result);
+
+      reader.onerror = function readerOnFailure() {
+        console.log('Error trying to read file.');
+      };
+      let mFile: MetricsFile = {
+        fileName: currInputFile.name,
+        stake: 0,
+        votingPower: 0,
+        electionAlgo: 0,
+        antiMaliciousAlgo: 0,
+        blockSize: 0,
+        numNodes: 0,
+        numMaliciousNodes: 0,
+        throughput: 0,
+        nakamotoCoeff: 0,
+      };
+    }
+  }
+
   function loadGraphView() {
     return (
       <>
-        <Heading size="med">Metrics Dashboard</Heading>
+        <Text>
+          Upload your previously downloaded metrics csv files here. Each file must have a
+          unique name.
+        </Text>
+        <br />
+        <Stack direction="row" spacing="20px">
+          <input
+            type="file"
+            width="auto"
+            onChange={(event) =>
+              event && event.target && event.target.files && event.target.files[0]
+                ? setCurrInputFile(event.target.files[0])
+                : null
+            }
+          />
+          <Button size="sm" colorScheme="teal" onClick={() => onInputFileChange()}>
+            Upload
+          </Button>
+        </Stack>
+
         <br />
         <ScatterChart
           width={500}
@@ -290,41 +387,21 @@ export default function Metrics() {
       <Box p={4}>
         <Heading size="lg">Metrics Dashboard</Heading>
         <br />
-        <Text>View and download metrics related to the current configuration.</Text>
+        <Text>
+          View and download metrics related to the current configuration or upload
+          downloaded metrics CSVs to generate graphs.
+        </Text>
         <br />
         <Tabs colorScheme="teal">
           <TabList>
             <Tab>Table</Tab>
             <Tab>Graph</Tab>
           </TabList>
-
           <TabPanels>
             <TabPanel>{loadTableView()}</TabPanel>
             <TabPanel>{loadGraphView()}</TabPanel>
           </TabPanels>
         </Tabs>
-        <FormControl>
-          <FormLabel htmlFor="csv-name">CSV Name</FormLabel>
-          <Input
-            id="csv-name"
-            placeholder="CSV name"
-            size="sm"
-            width="fill"
-            onChange={(event) => setFileName(event.target.value)}
-          />
-        </FormControl>
-        <br />
-        <Stack direction="row" spacing="20px">
-          <Button size="sm" colorScheme="teal" onClick={() => saveMetricsAsCSV()}>
-            Save as CSV
-          </Button>
-          <Link to="/">
-            <Button size="sm" colorScheme="gray">
-              Cancel
-            </Button>
-          </Link>
-        </Stack>
-        <br />
       </Box>
     </div>
   );

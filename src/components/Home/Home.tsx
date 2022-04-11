@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Grid, Heading, Flex, Text, Center } from '@chakra-ui/react';
+import { Box, Button, Grid, Heading, Flex, Text, Center } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import SimulationSettings from '../SimulationSettings';
 
@@ -55,58 +55,68 @@ export default function Home() {
           </Grid>
         </div>
         <div id="introduction" hidden>
-          <Heading size="lg">Introduction</Heading>
+          <Heading size="lg" align="center">
+            Introduction
+          </Heading>
           <br />
-          <Text>Welcome to the Blockchain Simulator!</Text>
+          <Text align="center">Welcome to the Blockchain Simulator!</Text>
           <br />
-          <Text>
+          <Text align="center">
             This simulation tool can be used to test out different network configurations,
             view host information and blockchain information, as well as download
             simulated metrics data.{' '}
           </Text>
           <br />
-          <Text>
+          <Text align="center">
             To use this simulator, start by changing the simulation settings or creating a
             network.
           </Text>
-          <Text>
+          <Text align="center">
             Then, click the &quot;Network&quot; button at the top to view the network on
             the map.
           </Text>
-          <Text>
+          <Text align="center">
             You may also see how hosts store blockchains internally via the
             &quot;Host&quot; view.
           </Text>
-          <Text>
+          <Text align="center">
             Finally, metrics can be viewed and downloaded via the &quot;Metrics&quot;
             button on the top right.
           </Text>
           <br />
-          <Button size="sm" onClick={() => toggleItemDisplay('introduction')}>
-            Back
-          </Button>
+          <Box align="center">
+            <Button
+              size="sm"
+              align="center"
+              onClick={() => toggleItemDisplay('introduction')}
+            >
+              Back
+            </Button>
+          </Box>
         </div>
         <div id="acknowledgements" hidden>
-          <Heading size="lg">Acknowledgements</Heading>
+          <Heading size="lg" align="center">
+            Acknowledgements
+          </Heading>
           <br />
-          <Text>
+          <Text align="center">
             This project was developed by Rafsan Haque, Daniel Liang, Chen Yan Wang and
             David Yee as Team 2021408 as part of project number PROJ141 during the school
             year of 2021-2022.
           </Text>
           <br />
-          <Text>
+          <Text align="center">
             We would like to express our sincere gratitude to several individuals and
             organizations for supporting us with our project. First, we are extremely
             grateful to our supervisor Shashank Motepalli for supporting us throughout the
             project. This would not have been possible without all the helpful
             information, resources and feedback we received from him. His immense
             knowledge, experience and expertise in the field of blockchain helped us
-            overcome many challenges.Without his help managing and completing the project
+            overcome many challenges. Without his help managing and completing the project
             would have been very difficult.
           </Text>
           <br />
-          <Text>
+          <Text align="center">
             We would also like to express our sincere gratitude to Professor Hans-Arno
             Jacobsen. His immense knowledge and experience with blockchain technology was
             invaluable to our success. We would also like to thank him for proposing this
@@ -114,16 +124,22 @@ export default function Home() {
             help managing and completing the project would have been very difficult.
           </Text>
           <br />
-          <Text>
+          <Text align="center">
             Finally, we would like to express our sincere thanks to Inci McGreal for
             supporting us through the project. Her feedback and constant encouragement
             helped us tremendously throughout the project. Without her help managing and
             completing the project would have been very difficult.
           </Text>
           <br />
-          <Button size="sm" onClick={() => toggleItemDisplay('acknowledgements')}>
-            Back
-          </Button>
+          <Box align="center">
+            <Button
+              size="sm"
+              align="center"
+              onClick={() => toggleItemDisplay('acknowledgements')}
+            >
+              Back
+            </Button>
+          </Box>
         </div>
         <div id="simulation-settings" hidden>
           <SimulationSettings
