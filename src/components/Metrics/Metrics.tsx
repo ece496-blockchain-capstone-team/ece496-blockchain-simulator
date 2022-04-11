@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { readFileSync } from 'fs';
+
 import {
   Heading,
   Button,
@@ -36,11 +37,20 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
+  Label,
   ResponsiveContainer,
 } from 'recharts';
+
 import { RootState, useAppSelector } from '../../store';
 
-interface MetricsFile {
+function genColour(): string {
+  let r = Math.floor(Math.random() * 255);
+  let g = Math.floor(Math.random() * 255);
+  let b = Math.floor(Math.random() * 255);
+  return 'rgb(' + r + ',' + g + ',' + b + ')';
+}
+
+interface IMetricsFile {
   fileName: string;
   stake: number;
   votingPower: number;
@@ -51,6 +61,132 @@ interface MetricsFile {
   numMaliciousNodes: number;
   throughput: number;
   nakamotoCoeff: number;
+}
+
+class MetricsFile implements IMetricsFile {
+  fileName: string;
+  stake: number;
+  votingPower: number;
+  electionAlgo: number;
+  antiMaliciousAlgo: number;
+  blockSize: number;
+  numNodes: number;
+  numMaliciousNodes: number;
+  throughput: number;
+  throughputKiB: number;
+  nakamotoCoeff: number;
+  fill: string;
+
+  constructor(
+    fileName: string,
+    stake: number,
+    votingPower: number,
+    electionAlgo: number,
+    antiMaliciousAlgo: number,
+    blockSize: number,
+    numNodes: number,
+    numMaliciousNodes: number,
+    throughput: number,
+    nakamotoCoeff: number
+  ) {
+    this.fileName = fileName;
+    this.stake = stake;
+    this.votingPower = votingPower;
+    this.electionAlgo = electionAlgo;
+    this.antiMaliciousAlgo = antiMaliciousAlgo;
+    this.blockSize = blockSize;
+    this.numNodes = numNodes;
+    this.numMaliciousNodes = numMaliciousNodes;
+    this.throughput = throughput;
+    this.throughputKiB = throughput / blockSize;
+    this.nakamotoCoeff = nakamotoCoeff;
+    this.fill = genColour();
+  }
+
+  // Getters
+  getFileName(): string {
+    return this.fileName;
+  }
+  getStake(): number {
+    return this.stake;
+  }
+  getVotingPower(): number {
+    return this.votingPower;
+  }
+  getElectionAlgo(): number {
+    return this.electionAlgo;
+  }
+  getAntiMaliciousAlgo(): number {
+    return this.antiMaliciousAlgo;
+  }
+  getBlockSize(): number {
+    return this.blockSize;
+  }
+  getNumNodes(): number {
+    return this.numNodes;
+  }
+  getNumMaliciousNodes(): number {
+    return this.numMaliciousNodes;
+  }
+  getThroughput(): number {
+    return this.throughput;
+  }
+  getThroughputKiB(): number {
+    return this.throughputKiB;
+  }
+  getNakamotoCoeff(): number {
+    return this.nakamotoCoeff;
+  }
+  getFill(): string {
+    return this.fill;
+  }
+
+  // Setters
+  setFileName(fn: string) {
+    this.fileName = fn;
+  }
+  setStake(s: number) {
+    this.stake = s;
+  }
+  setVotingPower(vp: number) {
+    this.votingPower = vp;
+  }
+  setElectionAlgo(ea: number) {
+    this.electionAlgo = ea;
+  }
+  setAntiMaliciousAlgo(ama: number) {
+    this.antiMaliciousAlgo = ama;
+  }
+  setBlockSize(bs: number) {
+    this.blockSize = bs;
+  }
+  setNumNodes(nn: number) {
+    this.numNodes = nn;
+  }
+  setNumMaliciousNodes(nmn: number) {
+    this.numMaliciousNodes = nmn;
+  }
+  setThroughput(t: number) {
+    this.throughput = t;
+  }
+  setThroughputKiB(tk: number) {
+    this.throughputKiB = tk;
+  }
+  setNakamotoCoeff(nc: number) {
+    this.nakamotoCoeff = nc;
+  }
+  setFill(f: string) {
+    this.fill = f;
+  }
+
+  // Calculate throughputKiB
+  calcThroughputKiB() {
+    if (this.blockSize > 0) {
+      this.throughputKiB = this.throughput * this.blockSize;
+    } else {
+      this.throughputKiB = 0;
+    }
+  }
 }
 
 // export default class Metrics extends React.Component {
@@ -79,13 +215,15 @@ export default function Metrics() {
   const [currInputFile, setCurrInputFile] = React.useState<File | null>(null);
   const [inputFiles, setInputFiles] = React.useState<Array<MetricsFile>>([]);
 
-  // TODO: Adds file
-  // setInputFiles([inputFiles..., 'foo.bar']);
-  // TODO: removes file
-  // setInputFiles(inputFiles.filter(name => 'foo.bar' !== name));
+  const HEADERS: string[] = [
+    'Parameter Name',
+    'Description',
+    'Parameter Variable',
+    'Value',
+  ];
 
   let csvData = [
-    ['Parameter Name', 'Description', 'Parameter Variable', 'Value'],
+    HEADERS,
     [
       'Staking',
       'Type of stake setup. 1 = Same stake for every host. 2 = Random stake',
@@ -279,58 +417,77 @@ export default function Metrics() {
     );
   }
 
-  /**
-   * TODO: delete this when we have actual data for finality
-   * Reference: https://recharts.org/en-US/examples/JointLineScatterChart
-   */
-  const data01 = [
-    { x: 10, y: 30 },
-    { x: 30, y: 200 },
-    { x: 45, y: 100 },
-    { x: 50, y: 400 },
-    { x: 70, y: 150 },
-    { x: 100, y: 250 },
-  ];
-  const data02 = [
-    { x: 30, y: 20 },
-    { x: 50, y: 180 },
-    { x: 75, y: 240 },
-    { x: 100, y: 100 },
-    { x: 120, y: 190 },
-  ];
-
   function onInputFileChange() {
     let reader = new FileReader();
     if (currInputFile != null) {
-      // TODO: implement this
-      const tmpFile: File = currInputFile;
-      console.log('before read as text');
       reader.readAsText(currInputFile);
-      console.log('after read as text');
-
-      console.log(reader.result);
       reader.onload = function readerOnload() {
-        console.log('setting reader onload');
-        console.log('readerresult');
-        console.log(reader.result);
+        // Note: can only use reader.result here
+        let resultStr: string = reader.result as string;
+        let resultLines: string[] = resultStr.split(/\r?\n/);
+        // Check if headers are same as file
+        let loadedHeaders = resultLines[0].split(',');
+        for (let i = 1; i < HEADERS.length; i++) {
+          if (HEADERS[i] !== loadedHeaders[i]) {
+            console.log('Error: Invalid file headers.');
+            return;
+          }
+        }
+        let mFile: MetricsFile = new MetricsFile(
+          currInputFile.name,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        );
+        for (let i = 1; i < resultLines.length; i++) {
+          let params = resultLines[i].split(',');
+          if (params.length === HEADERS.length) {
+            let paramVar = params[2];
+            let paramVal = params[3];
+            if (paramVar === 'stake') {
+              mFile.setStake(Number(paramVal));
+            } else if (paramVar === 'votingPower') {
+              mFile.setVotingPower(Number(paramVal));
+            } else if (paramVar === 'electionAlgo') {
+              mFile.setElectionAlgo(Number(paramVal));
+            } else if (paramVar === 'antiMaliciousAlgo') {
+              mFile.setAntiMaliciousAlgo(Number(paramVal));
+            } else if (paramVar === 'blockSize') {
+              mFile.setBlockSize(Number(paramVal));
+            } else if (paramVar === 'numNodes') {
+              mFile.setNumNodes(Number(paramVal));
+            } else if (paramVar === 'numMaliciousNodes') {
+              mFile.setNumMaliciousNodes(Number(paramVal));
+            } else if (paramVar === 'throughput') {
+              mFile.setThroughput(Number(paramVal));
+            } else if (paramVar === 'nakamotoCoeff') {
+              mFile.setNakamotoCoeff(Number(paramVal));
+            }
+          }
+        }
+        mFile.calcThroughputKiB();
+
+        // Replace duplicate file if existing
+        let tmpInputFiles = inputFiles;
+        const dupIdx = tmpInputFiles.findIndex(
+          (obj) => obj.getFileName() === mFile.getFileName()
+        );
+        if (dupIdx !== -1) {
+          tmpInputFiles.splice(dupIdx, 1);
+        }
+
+        // Add to input files list
+        setInputFiles([...tmpInputFiles, mFile]);
       };
-      console.log('after');
-      console.log(reader.result);
 
       reader.onerror = function readerOnFailure() {
         console.log('Error trying to read file.');
-      };
-      let mFile: MetricsFile = {
-        fileName: currInputFile.name,
-        stake: 0,
-        votingPower: 0,
-        electionAlgo: 0,
-        antiMaliciousAlgo: 0,
-        blockSize: 0,
-        numNodes: 0,
-        numMaliciousNodes: 0,
-        throughput: 0,
-        nakamotoCoeff: 0,
       };
     }
   }
@@ -359,25 +516,84 @@ export default function Metrics() {
         </Stack>
 
         <br />
-        <ScatterChart
-          width={500}
-          height={400}
-          margin={{
-            top: 20,
-            right: 20,
-            bottom: 20,
-            left: 20,
-          }}
-        >
-          <CartesianGrid />
-          <XAxis type="number" dataKey="x" name="stature" unit="Number of Transactions" />
-          <YAxis type="number" dataKey="y" name="weight" unit="Time" />
-          <ZAxis type="number" range={[100]} />
-          <Tooltip cursor={{ strokeDasharray: '3 3' }} />
-          <Legend />
-          <Scatter name="File 1 Name" data={data01} fill="#8884d8" line />
-          <Scatter name="File 2 Name" data={data02} fill="#82ca9d" line />
-        </ScatterChart>
+        <Heading size="md">Throughput (blocks/sec) vs # Nodes</Heading>
+        <br />
+        <Box width="60%">
+          <ScatterChart
+            width={800}
+            height={400}
+            margin={{
+              top: 20,
+              right: 20,
+              bottom: 20,
+              left: 20,
+            }}
+          >
+            <CartesianGrid />
+            <XAxis type="number" dataKey="x" name="numNodes" unit="">
+              <Label value="Number of Nodes" offset={0} position="bottom" fill="gray" />
+            </XAxis>
+            <YAxis type="number" dataKey="y" name="throughput" unit="">
+              <Label
+                value="Throughput (blocks/sec)"
+                angle={270}
+                offset={0}
+                position="left"
+                fill="gray"
+              />
+            </YAxis>
+            <ZAxis type="number" range={[100]} />
+            <Tooltip cursor={{ strokeDasharray: '3 3' }} />
+            <Legend layout="vertical" verticalAlign="top" align="right" />
+            {inputFiles.map((file) => (
+              <Scatter
+                name={file.fileName}
+                data={[{ x: file.numNodes, y: file.throughput }]}
+                fill={file.fill}
+              />
+            ))}
+          </ScatterChart>
+        </Box>
+        <br />
+        <Heading size="md">Throughput (KiB/sec) vs # Nodes</Heading>
+        <br />
+        <Box width="60%">
+          <ScatterChart
+            width={800}
+            height={400}
+            margin={{
+              top: 20,
+              right: 20,
+              bottom: 20,
+              left: 20,
+            }}
+          >
+            <CartesianGrid />
+            <XAxis type="number" dataKey="x" name="numNodes" unit="">
+              <Label value="Number of Nodes" offset={0} position="bottom" fill="gray" />
+            </XAxis>
+            <YAxis type="number" dataKey="y" name="throughput" unit="">
+              <Label
+                value="Throughput (KiB/sec)"
+                angle={270}
+                offset={0}
+                position="left"
+                fill="gray"
+              />
+            </YAxis>
+            <ZAxis type="number" range={[100]} />
+            <Tooltip cursor={{ strokeDasharray: '3 3' }} />
+            <Legend layout="vertical" verticalAlign="top" align="right" />
+            {inputFiles.map((file) => (
+              <Scatter
+                name={file.fileName}
+                data={[{ x: file.numNodes, y: file.throughputKiB }]}
+                fill={file.fill}
+              />
+            ))}
+          </ScatterChart>
+        </Box>
+        <br />
       </>
     );
   }
