@@ -547,6 +547,7 @@ export default function Metrics() {
             <Legend layout="vertical" verticalAlign="top" align="right" />
             {inputFiles.map((file) => (
               <Scatter
+                key={file.fileName}
                 name={file.fileName}
                 data={[{ x: file.numNodes, y: file.throughput }]}
                 fill={file.fill}
@@ -586,6 +587,7 @@ export default function Metrics() {
             <Legend layout="vertical" verticalAlign="top" align="right" />
             {inputFiles.map((file) => (
               <Scatter
+                key={file.fileName}
                 name={file.fileName}
                 data={[{ x: file.numNodes, y: file.throughputKiB }]}
                 fill={file.fill}
