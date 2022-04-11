@@ -33,7 +33,11 @@ export default function Home() {
       <Center p={4} h={window.innerHeight - 100}>
         <div id="options">
           <Grid templateColumns="repeat(1, 1fr)" gap={20} width={500}>
-            <Button colorScheme="blue" size="lg" onClick={() => navigate('/network')}>
+            <Button
+              colorScheme="blue"
+              size="lg"
+              onClick={() => navigate('/network?setup=true')}
+            >
               Create Network
             </Button>
             <Button size="lg" onClick={() => toggleItemDisplay('introduction')}>

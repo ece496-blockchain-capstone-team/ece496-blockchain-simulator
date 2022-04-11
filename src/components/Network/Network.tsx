@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import DeckGL from '@deck.gl/react';
 import { IconLayer, ArcLayer } from '@deck.gl/layers';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import { Flex, Heading, Box, Button, Stack, Center } from '@chakra-ui/react';
 import { StaticMap, MapContext, NavigationControl } from 'react-map-gl';
@@ -46,18 +46,23 @@ const ICON_MAPPING = {
 };
 
 export default function Network() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const setup = searchParams.get('setup');
+
+  const [showMap, setShowMap] = useState(false);
+
   const [loadedMap, setLoadedMap] = useState(false);
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  let initialized = false;
-
-  const getInit = initialized;
-
   useEffect(() => {
-    dispatch(network.actions.init());
-  }, []);
+    setShowMap(setup === null);
+
+    if (setup) {
+      dispatch(network.actions.init());
+    }
+  }, [setup]);
 
   const throughput: number = useAppSelector(
     (state) => state.network.throughput
@@ -107,112 +112,62 @@ export default function Network() {
     getTargetColor: (d) => [140, 140, 140],
   });
 
-  const stepTime = (userInput: number) => {
-    console.log(nodes);
-    dispatch(timestep(userInput));
-  };
-
-  const stepView = (userInput: number) => {
-    dispatch(simulate(userInput));
-    // dispatch(simulate(50));
-  };
-
-  function toggleItemDisplay(itemName: string) {
-    let item = document.getElementById(itemName);
-    console.log(item);
-    if (item != null) {
-      item.hidden = !item.hidden;
-    }
-  }
-
-  function confirmSettings() {
-    console.log('confirm settings');
-    toggleItemDisplay('settings');
-    toggleItemDisplay('nodeSetup');
-    console.log('confirm settings done');
-  }
-
-  function cancelSettings() {
-    console.log('cancel settings');
-    navigate('/');
-  }
-
   function confirm(nodeNum: any) {
     console.log('confirm content');
     console.log(nodeNum);
     dispatch(setupNodes(nodeNum));
-    toggleItemDisplay('nodeSetup');
-    toggleItemDisplay('content');
+    navigate('/network');
   }
 
   function cancel() {
     console.log('cancel content');
-    toggleItemDisplay('settings');
-    toggleItemDisplay('nodeSetup');
     navigate('/');
-  }
-
-  function hostView() {
-    toggleItemDisplay('content');
-    toggleItemDisplay('host');
   }
 
   return (
     <Stack>
-      {/* <div id="settings">
-        <Center>
-          <SimulationSettings
-            confirmSettings={confirmSettings}
-            cancelSettings={cancelSettings}
-          />
-        </Center>
-      </div> */}
-      <div id="nodeSetup">
-        <Center>
-          <NodeSelector confirm={confirm} cancel={cancel} />
-        </Center>
-      </div>
-      {/* <div id="host" hidden>
-        <SideBar hostView={hostView} stepTime={stepTime} stepView={stepView} throughput={throughput}>
-          <Box>
-            <Host />
-
-          </Box>
-        </SideBar>
-      </div> */}
-      <div id="content" hidden>
-        <SideBar
-          hostView={hostView}
-          stepTime={stepTime}
-          stepView={stepView}
-          throughput={throughput}
-        >
-          <Box p={0} m={0}>
-            <Flex>
-              <Box
-                position="absolute"
-                top={0}
-                height={window.innerHeight}
-                width={window.innerWidth - 265}
-              >
-                <DeckGL
-                  initialViewState={INITIAL_VIEW_STATE}
-                  controller
-                  layers={[iconLayer, arcLayer]}
-                  ContextProvider={MapContext.Provider}
+      {setup && (
+        <div id="nodeSetup">
+          <Center>
+            <NodeSelector confirm={confirm} cancel={cancel} />
+          </Center>
+        </div>
+      )}
+      {showMap && (
+        <div id="content">
+          <SideBar
+            hostView={() => navigate('/host')}
+            stepTime={(userInput: number) => dispatch(timestep(userInput))}
+            stepView={(userInput: number) => dispatch(simulate(userInput))}
+            throughput={throughput}
+          >
+            <Box p={0} m={0}>
+              <Flex>
+                <Box
+                  position="absolute"
+                  top={0}
+                  height={window.innerHeight}
+                  width={window.innerWidth - 265}
                 >
-                  <StaticMap
-                    mapStyle={MAP_STYLE}
-                    mapboxApiAccessToken="pk.eyJ1IjoiZGF2aWR5ZWUiLCJhIjoiY2wwMzh3d202MGt6NjNpbWo4ZHRtbHlwZCJ9.L3KYonYcVS3OAIL_eueY3w"
-                    onLoad={() => setLoadedMap(true)}
-                  />
-                  <NavigationControl style={NAV_CONTROL_STYLE} />
-                </DeckGL>
-              </Box>
-            </Flex>
-          </Box>
-        </SideBar>
-      </div>
+                  <DeckGL
+                    initialViewState={INITIAL_VIEW_STATE}
+                    controller
+                    layers={[iconLayer, arcLayer]}
+                    ContextProvider={MapContext.Provider}
+                  >
+                    <StaticMap
+                      mapStyle={MAP_STYLE}
+                      mapboxApiAccessToken="pk.eyJ1IjoiZGF2aWR5ZWUiLCJhIjoiY2wwMzh3d202MGt6NjNpbWo4ZHRtbHlwZCJ9.L3KYonYcVS3OAIL_eueY3w"
+                      onLoad={() => setLoadedMap(true)}
+                    />
+                    <NavigationControl style={NAV_CONTROL_STYLE} />
+                  </DeckGL>
+                </Box>
+              </Flex>
+            </Box>
+          </SideBar>
+        </div>
+      )}
     </Stack>
   );
 }
