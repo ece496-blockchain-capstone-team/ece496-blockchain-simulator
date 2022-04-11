@@ -14,6 +14,7 @@ import {
   Th,
   Td,
   Tbody,
+  useColorModeValue,
 } from '@chakra-ui/react';
 
 export function Card({
@@ -25,6 +26,8 @@ export function Card({
   // selected: boolean;
   // onClick: Function;
 }) {
+  const cardColor = useColorModeValue('teal.500', 'teal.300');
+  const innerColor = useColorModeValue('teal.400', 'gray.800');
   const visibility = React.useContext(VisibilityContext);
 
   // const visible = visibility.isItemVisible(itemId);
@@ -45,7 +48,7 @@ export function Card({
       className="Card"
     >
       <Box
-        bg="teal"
+        bg={cardColor}
         h="100%"
         alignItems="center"
         borderWidth="1px"
@@ -56,7 +59,7 @@ export function Card({
       >
         <Heading mb={1}> Block # {blockBbj[0].blockId} </Heading>
         <Box
-          bg="black"
+          bg={innerColor}
           h="60%"
           alignItems="center"
           borderWidth="1px"
@@ -111,7 +114,7 @@ export function Card({
           </Box>
         </Box>
         <Box
-          bg="black"
+          bg={innerColor}
           h="30%"
           alignItems="center"
           borderWidth="1px"
